@@ -894,7 +894,7 @@ function layers(now){
   const stars=verPuntos?vis.filter(p=>p.dist==='star1'||p.dist==='star2'):[];
   const lms=(zNow>=LOD.hitos||state.lmSel)?LMS.filter(l=>l.major||zNow>=LOD.hitosTodos||state.lmSel===l.id):[];
   const pillar=p=>is3d?(p.dist==='star2'?520:360)*Math.max(.35,easeOut(anim.elev))*(0.3+0.7*zf):0;
-  if(is3d&&stars.length) L.push(new D.ColumnLayer({id:'faros',data:stars,getPosition:p=>[p.lng,p.lat],diskResolution:16,radius:vs.zoom>14?6:14,getElevation:pillar,getFillColor:[255,212,0,210],extruded:true,material:{ambient:.9,diffuse:.3},pickable:true,autoHighlight:true,highlightColor:[255,255,255,120],parameters:solid,updateTriggers:{getElevation:[anim.elev,zq]}}));
+  if(is3d&&stars.length) L.push(new D.ColumnLayer({id:'faros',data:stars,getPosition:p=>[p.lng,p.lat],diskResolution:16,radius:vs.zoom>14?6:14,getElevation:pillar,getFillColor:[255,212,0,210],extruded:true,material:{ambient:.9,diffuse:.3},pickable:false,parameters:solid,updateTriggers:{getElevation:[anim.elev,zq]}}));
   if(state.lm&&lms.length&&D.SimpleMeshLayer){
     const v=clamp(Math.pow(2,14.8-vs.zoom),1,8), rise=Math.max(.02,easeOut(anim.elev));
     const mppL=156543.03*Math.cos(vs.latitude*Math.PI/180)/Math.pow(2,vs.zoom);
@@ -902,7 +902,7 @@ function layers(now){
     const sc=l=>{const vz=vzOf(l); const lejos=Math.min(v,520/l.h)>=vz;
       const hf=lejos?Math.min(Math.sqrt(vz),Math.max(1,360/l.fp)):1;   // de cerca, proporciones reales: solo se estira a lo alto
       return [hf,hf,vz*rise]};
-    L.push(new D.ScatterplotLayer({id:'lm-base',data:lms,getPosition:l=>[l.lng,l.lat],getRadius:l=>l.fp*sc(l)[0]*.62+14,radiusUnits:'meters',filled:true,getFillColor:l=>state.lmSel===l.id?[255,205,90,26]:[246,240,228,8],stroked:true,getLineColor:l=>state.lmSel===l.id?[255,205,90,210]:[246,240,228,70],lineWidthMinPixels:1,pickable:true,parameters:flat,updateTriggers:{getRadius:zq,getFillColor:state.lmSel,getLineColor:state.lmSel}}));
+    L.push(new D.ScatterplotLayer({id:'lm-base',data:lms,getPosition:l=>[l.lng,l.lat],getRadius:l=>l.fp*sc(l)[0]*.62+14,radiusUnits:'meters',filled:true,getFillColor:l=>state.lmSel===l.id?[255,205,90,26]:[246,240,228,8],stroked:true,getLineColor:l=>state.lmSel===l.id?[255,205,90,210]:[246,240,228,70],lineWidthMinPixels:1,pickable:false,parameters:flat,updateTriggers:{getRadius:zq,getFillColor:state.lmSel,getLineColor:state.lmSel}}));
     lms.forEach(l=>{ L.push(new D.SimpleMeshLayer({id:'lm-'+l.id,data:[l],mesh:l.mesh,getPosition:x=>[x.lng,x.lat,0],getColor:state.lmSel===l.id?[255,248,232,255]:[250,246,238,255],getScale:()=>sc(l),getOrientation:[0,l.yaw||0,0],updateTriggers:{getScale:[zq,Math.round(rise*60)],getColor:state.lmSel},
       material:{ambient:.62,diffuse:.78,shininess:44,specularColor:[120,104,80]},pickable:true,autoHighlight:true,highlightColor:[255,214,120,120],parameters:solid}));
       if(state.lmSel===l.id) L.push(new D.SimpleMeshLayer({id:'lmw-'+l.id,data:[l],mesh:l.mesh,getPosition:x=>[x.lng,x.lat,0],getColor:[255,214,120,150],getScale:()=>sc(l),
@@ -1018,7 +1018,7 @@ document.addEventListener('visibilitychange',kick);
 /* ---------- interacción con el mapa ---------- */
 const tip=$('#tip');
 let etiquetados=new Set();
-const isPlaceLayer=id=>id==='puntos'||id==='estrellas'||id==='faros'||id==='ruta-n'||id==='lugar-t';
+const isPlaceLayer=id=>id==='puntos'||id==='estrellas'||id==='ruta-n'||id==='lugar-t';
 function onHover(info){
   const o=info.object, id=info.layer&&info.layer.id;
   let html='';
@@ -1045,7 +1045,7 @@ function onClick(info){
   const o=info.object, id=info.layer&&info.layer.id;
   if(o&&isPlaceLayer(id)){
     const porNombre=(id==='lugar-t');                       // tocó el nombre: siempre abre
-    const alLado=(id==='puntos'||id==='estrellas')&&!tocoElPunto(info,o);
+    const alLado=(id==='puntos')&&!tocoElPunto(info,o);            // la estrella Michelin flota sobre su pilar: ahí no mide la distancia al piso
     const sinNombre=(id==='puntos'||id==='estrellas')&&!etiquetados.has(o.id);
     if(!porNombre&&(alLado||sinNombre)){                     // si no se ve su nombre o tocaste al lado, es la zona
       const b=deckgl.pickObject({x:info.x,y:info.y,radius:10,layerIds:['barrios']});
@@ -1604,7 +1604,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=f2c8ba00dd').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=3372eb03fe').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
