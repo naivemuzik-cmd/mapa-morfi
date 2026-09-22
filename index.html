@@ -349,6 +349,97 @@
   .sw button.on{background:var(--ok);box-shadow:0 0 12px rgba(61,255,158,.4)}
   .sw button.on:after{left:25px}
 
+
+  /* ================= versión celular: buscar primero, mapa después ================= */
+  #mShell,#mTabs{display:none}
+  @media (max-width:899px){
+    #mShell{display:flex;flex-direction:column;position:absolute;inset:0;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:36;background:var(--bg);overflow:hidden}
+    body[data-mtab="mapa"] #mShell{display:none}
+    body[data-mtab="mapa"] .topbar,body[data-mtab="mapa"] .chips{display:none}
+    body:not([data-mtab="mapa"]) .topbar,body:not([data-mtab="mapa"]) .chips,body:not([data-mtab="mapa"]) .fabs,body:not([data-mtab="mapa"]) .views,body:not([data-mtab="mapa"]) .hint{display:none!important}
+    body[data-mtab="mapa"] .fabs{display:flex}
+    #mTabs{display:grid;grid-template-columns:repeat(4,1fr);position:absolute;left:0;right:0;bottom:0;z-index:40;background:rgba(9,11,17,.96);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+    #mTabs button{height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);position:relative}
+    #mTabs button svg{width:21px;height:21px}
+    #mTabs button.on{color:var(--neon2)}
+    #mTabs button.on:before{content:"";position:absolute;top:0;left:22%;right:22%;height:2px;background:var(--neon2);box-shadow:0 0 10px var(--neon2)}
+    #mTabs .badge{position:absolute;top:8px;right:22%;min-width:16px;height:16px;border-radius:8px;background:var(--neon);color:#fff;font-size:9px;display:grid;place-items:center;padding:0 4px}
+
+    .mtop{padding:calc(10px + env(safe-area-inset-top,0px)) 12px 8px;background:linear-gradient(180deg,rgba(9,11,17,1),rgba(9,11,17,.96));flex:none}
+    .mtop .mbrand{display:flex;align-items:baseline;gap:8px;margin-bottom:9px}
+    .mtop .mbrand b{font-family:var(--display);font-size:18px;color:#fff;text-shadow:0 0 8px rgba(255,45,85,.8)}
+    .mtop .mbrand span{font-family:var(--mono);font-size:10px;color:var(--neon2);letter-spacing:.12em;text-transform:uppercase}
+    .msearch{display:flex;align-items:center;gap:8px;height:46px;padding:0 10px 0 13px;border-radius:4px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+    .msearch input{flex:1;min-width:0;background:none;border:0;outline:none;font-size:16px;color:var(--text)}
+    .msearch input::placeholder{color:var(--dim)}
+    .msearch button{color:var(--muted);font-size:20px;padding:4px 6px}
+
+    .mcats{display:flex;gap:8px;overflow-x:auto;padding:10px 12px 4px;scrollbar-width:none;flex:none}
+    .mcats::-webkit-scrollbar{display:none}
+    .mcat{flex:none;width:74px;height:74px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;font-weight:700;color:var(--muted);transition:transform .15s var(--spring),background .15s,border-color .15s}
+    .mcat .rnd{--s:30px}
+    .mcat:active{transform:scale(.94)}
+    .mcat.on{background:color-mix(in srgb,var(--c) 22%,transparent);border-color:var(--c);color:#fff}
+    .mquick{display:flex;gap:7px;overflow-x:auto;padding:10px 12px;scrollbar-width:none;flex:none}
+    .mquick::-webkit-scrollbar{display:none}
+    .mq{flex:none;height:34px;padding:0 13px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+    .mq.on{border-color:var(--neon2);color:var(--neon2);background:rgba(0,229,255,.1)}
+    .mq.on.gold{border-color:var(--sign);color:var(--sign);background:rgba(255,212,0,.1)}
+
+    .mmeta{display:flex;align-items:center;gap:10px;padding:2px 14px 8px;flex:none;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+    .mmeta b{color:var(--text)}
+    .mmeta .sp{margin-left:auto;display:flex;gap:8px}
+    .mmeta button{color:var(--neon2);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:4px 0}
+
+    .mlist{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:16px;-webkit-overflow-scrolling:touch}
+    .mrow{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.05);position:relative}
+    .mrow:active{background:rgba(255,255,255,.05)}
+    .mrow .t{min-width:0}
+    .mrow .t b{display:block;font-size:15px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mrow .t span{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+    .mrow .rt{text-align:right;font-family:var(--mono);font-size:11px;color:var(--dim);white-space:nowrap}
+    .mrow .rt .g{display:block;color:#fbbc04;font-size:13px;font-weight:700}
+    .mrow .rt .pr{color:var(--sign)}
+    .mrow .mk{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);opacity:.75}
+    .mrow .tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+    .mrow .tags i{font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 5px;border-radius:2px;background:rgba(255,255,255,.07);color:var(--muted)}
+    .mrow .tags i.gold{background:var(--sign);color:#141000}
+    .mrow .tags i.been{color:var(--ok)}
+    .mrow .tags i.want{color:var(--sign)}
+    .mempty{padding:40px 24px;text-align:center;color:var(--muted);font-size:14px}
+    .mempty b{display:block;font-family:var(--display);font-size:19px;color:var(--text);margin-bottom:8px}
+    .mempty button{margin-top:14px;border:1px solid var(--neon2);color:var(--neon2);border-radius:3px;padding:10px 16px;font-weight:700}
+    .mmore{padding:14px;text-align:center}
+
+    /* hoja de opciones (ordenar / filtros) */
+    .msheet{position:absolute;inset:0;z-index:70;background:rgba(3,4,7,.6);display:flex;align-items:flex-end}
+    .msheet[hidden]{display:none}
+    .msheet .box{width:100%;max-height:80%;overflow:auto;background:var(--panel);border-top:2px solid var(--neon2);border-radius:10px 10px 0 0;padding:6px 0 calc(16px + env(safe-area-inset-bottom,0px));animation:sheetIn .35s var(--spring)}
+    .msheet h3{font-family:var(--display);font-weight:400;font-size:18px;margin:14px 18px 10px}
+    .msheet .opt2{display:flex;align-items:center;gap:12px;padding:13px 18px;border-top:1px solid rgba(255,255,255,.05);font-size:15px;width:100%;text-align:left}
+    .msheet .opt2.on{color:var(--neon2)}
+    .msheet .opt2 .ck{margin-left:auto;font-family:var(--mono)}
+    .msheet .fb{padding:12px 18px}
+    .msheet .fb .seg{width:100%;margin-bottom:10px}
+    .msheet .fb .seg button{flex:1}
+    .msheet .fb select{width:100%;margin-bottom:10px;height:42px;font-size:15px}
+    .msheet .fb .optrow{gap:7px}
+    .msheet .fb .tag{height:36px;display:flex;align-items:center;font-size:13px}
+    .msheet .go{display:flex;gap:8px;padding:12px 18px 0}
+    .msheet .go button{flex:1;height:46px;border-radius:3px;font-weight:700}
+    .msheet .go .clear{border:1px solid var(--line);color:var(--muted)}
+    .msheet .go .ok{background:var(--neon);color:#fff}
+
+    /* en el mapa: barra flotante para volver a la lista */
+    #mBack{position:absolute;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top,0px));z-index:37;display:none;align-items:center;gap:9px;height:42px;padding:0 8px 0 14px;border-radius:4px;font-size:13px;font-weight:700;white-space:nowrap;max-width:calc(100% - 24px)}
+    body[data-mtab="mapa"] #mBack{display:flex}
+    #mBack b{color:var(--neon2);font-family:var(--mono)}
+    #mBack .x2{background:rgba(255,255,255,.08);border-radius:3px;padding:8px 10px;font-size:12px}
+    .card{bottom:calc(58px + env(safe-area-inset-bottom,0px));max-height:78%;background:rgba(7,9,14,.99);box-shadow:0 -24px 70px rgba(0,0,0,.85),inset 0 1px 0 var(--glass-hi)}
+    body:not([data-mtab="mapa"]) .card:before{content:"";position:fixed;inset:0;background:rgba(3,4,7,.5);z-index:-1}
+    [hidden]{display:none!important}
+    body:not([data-mtab="mapa"]) .card{z-index:45}
+  }
   @media (min-width:900px) and (max-width:1240px){.fab:not(.fab-main) .lbl{display:none}.fab:not(.fab-main){padding:0 13px}}
   @media (min-width:900px) and (max-height:620px){.card{max-height:calc(100% - 136px)}.fabs{display:none}}
   @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}#splash .t span{opacity:1}.rain{display:none}}
@@ -452,6 +543,37 @@
 
   <div id="splash" aria-hidden="true"><div class="t" id="splashT"></div><div class="s">Buenos Aires · de noche</div><div class="c" id="splashC">0 lugares</div></div>
 
+
+  <div id="mShell" hidden>
+    <div class="mtop">
+      <div class="mbrand"><b>Mapa del Morfi</b><span id="mBrandSub"></span></div>
+      <label class="msearch"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="opacity:.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="mq" type="search" placeholder="Buscar lugar, plato, barrio…" autocomplete="off" aria-label="Buscar"><button id="mqClear" type="button" hidden aria-label="Borrar">×</button></label>
+    </div>
+    <div class="mcats" id="mCats"></div>
+    <div class="mquick" id="mQuick"></div>
+    <div class="mmeta"><span id="mCount"></span><span class="sp"><button id="mSortBtn">Ordenar</button><button id="mFiltBtn">Filtros</button></span></div>
+    <div class="mlist" id="mList"></div>
+  </div>
+
+  <div id="mBack" class="glass"><span>Resultados: <b id="mBackN">0</b></span><button class="x2" id="mBackBtn">Ver lista</button></div>
+
+  <nav id="mTabs" hidden aria-label="Secciones">
+    <button data-t="lista" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Buscar</button>
+    <button data-t="mapa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m9 4-6 3v13l6-3 6 3 6-3V4l-6 3-6-3Z"/><path d="M9 4v13M15 7v13"/></svg>Mapa</button>
+    <button data-t="ruleta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>Ruleta</button>
+    <button data-t="guardados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20.5 4.5 13a4.6 4.6 0 0 1 6.5-6.5l1 1 1-1A4.6 4.6 0 1 1 19.5 13Z"/></svg>Míos<span class="badge" id="mSaved" hidden>0</span></button>
+  </nav>
+
+  <div class="msheet" id="mSortSheet" hidden><div class="box">
+    <h3>Ordenar por</h3><div id="mSortOpts"></div>
+    <div class="go"><button class="ok" data-close-sheet>Listo</button></div>
+  </div></div>
+  <div class="msheet" id="mFiltSheet" hidden><div class="box">
+    <h3>Filtros</h3><div class="fb" id="mFiltBody"></div>
+    <div class="go"><button class="clear" id="mFiltClear">Limpiar</button><button class="ok" data-close-sheet>Ver <b id="mFiltN">0</b></button></div>
+  </div></div>
+
   <div class="modal" id="mRuleta" hidden role="dialog" aria-labelledby="hRuleta">
     <div class="mbox glass">
       <div class="mh"><h2 id="hRuleta">¿Qué morfo hoy?<small>La ruleta decide por vos</small></h2><button class="x" data-close aria-label="Cerrar">✕</button></div>
@@ -526,7 +648,8 @@ const easeOut=t=>1-Math.pow(1-t,3);
   Object.values(byB).forEach(arr=>arr.forEach((p,i)=>{const a=i*2.399,r=0.0011*Math.sqrt(i+1);p.lat+=r*Math.sin(a);p.lng+=r*Math.cos(a)*1.2})) }
 
 /* ---------- estado ---------- */
-const state={cats:new Set(),price:0,tags:new Set(),barrio:'',q:'',list:'',near:false,only:null,onlyLabel:'',sel:null,route:[],geo:null,sound:true,
+const M={tab:'lista',autoWant:false};
+const state={cats:new Set(),price:0,tags:new Set(),barrio:'',q:'',list:'',near:false,only:null,onlyLabel:'',sel:null,route:[],geo:null,sound:true,sort:'auto',
   v3d:true,lm:true,lmSel:null,heat:false,trains:true,orbit:false,hoverBarrio:null,winner:null};
 let U={};
 const LS='morfi.v1';
@@ -611,7 +734,11 @@ let fontsReady=false, introDone=false, uVer=0, routeTrip=null;
 const anim={t0:performance.now(),elev:reduced?1:0,pts:reduced?1:0,heat:0,sel:1};
 let lighting=null;
 try{ if(D.LightingEffect) lighting=new D.LightingEffect({amb:new D.AmbientLight({color:[255,255,255],intensity:1.0}),dir:new D.DirectionalLight({color:[255,230,215],intensity:1.25,direction:[-2,-5,-9]})}) }catch(e){lighting=null}
-let deckgl=null;
+let deckgl=null, deckTried=false;
+function ensureDeck(){ if(deckgl||deckTried) return !!deckgl; deckTried=true; const ok=initDeck(); if(ok){ introDone=true; anim.elev=0; anim.pts=0; fontsPending=true;
+    const fl=document.fonts&&document.fonts.load?Promise.all([document.fonts.load('48px "Dela Gothic One"'),document.fonts.load('700 16px "Zen Kaku Gothic New"')]):Promise.resolve();
+    Promise.race([fl,new Promise(r=>setTimeout(r,2500))]).catch(()=>{}).then(()=>{fontsReady=true;fontsPending=false;kick()});
+    flyTo({...HOME},{d:0}); kick() } return ok }
 function initDeck(){
   if(!D||!D.Deck){ $('#stage').innerHTML='<div class="empty" style="padding-top:30vh"><b>No pude cargar el motor 3D</b>Revisá la conexión y recargá la página.</div>'; return false }
   try{
@@ -639,7 +766,7 @@ let zq=null; function zoomChanged(){const q=Math.round(vs.zoom*4)/4; if(q!==zq){
 const radiusPx=()=>clamp(2.8+(vs.zoom-10.5)*1.15,3.2,10.5);
 
 function flyTo(target,opt={}){
-  const to={...vs,...target};
+  const to={...vs,...target}; if(!deckgl){vs=to;return}
   const d=reduced?0:(opt.d||1400);
   deckgl.setProps({initialViewState:{...to,...LIM,transitionDuration:d,transitionInterpolator:d?new D.FlyToInterpolator({speed:1.6}):undefined,transitionEasing:easeInOut}});
   vs=to;
@@ -653,6 +780,7 @@ function fitBounds(b,opt={}){
   flyTo({longitude:f.longitude,latitude:f.latitude,zoom:Math.min(f.zoom-(state.v3d?0.3:0),opt.maxZoom||16.5),pitch:state.v3d?(opt.pitch??48):0},{d:opt.d||1500});
 }
 function focusPoint(p,zoom){
+  if(!deckgl) return;
   const {width,height}=viewportSize();
   const z=Math.max(vs.zoom,zoom||15.6);
   const pitch=state.v3d?48:0, bearing=vs.bearing;
@@ -776,7 +904,7 @@ function buildRoute(){ const rpts=state.route.filter(id=>byId[id]).map(id=>byId[
 
 /* ---------- bucle de animación ---------- */
 let raf=0;
-function needsLoop(){return !reduced&&!document.hidden&&!!deckgl&&(state.trains||state.orbit||!!state.sel||!!state.winner||state.near||!!routeTrip||(introDone&&(anim.elev<1||anim.pts<1))||(state.heat&&anim.heat<1)||(!state.heat&&anim.heat>0)||anim.sel<1||fontsPending)}
+function needsLoop(){return !reduced&&!document.hidden&&!!deckgl&&!(isMobile()&&M.tab!=='mapa')&&(state.trains||state.orbit||!!state.sel||!!state.winner||state.near||!!routeTrip||(introDone&&(anim.elev<1||anim.pts<1))||(state.heat&&anim.heat<1)||(!state.heat&&anim.heat>0)||anim.sel<1||fontsPending)}
 let fontsPending=false;
 function frame(now){
   raf=0;
@@ -840,13 +968,24 @@ function passes(p,ignoreCat){
   return true;
 }
 const DRANK={star2:4,star1:3,bib:2,recommended:1};
-function filtered(){const arr=PL.filter(p=>passes(p));if(state.geo&&state.near)arr.sort((a,b)=>pdist(a)-pdist(b));else arr.sort((a,b)=>(DRANK[b.dist]||0)-(DRANK[a.dist]||0)||a.n.localeCompare(b.n,'es'));return arr}
+// puntaje interno para "lo mejor primero": Michelin, puntaje de Google (con peso por cantidad de reseñas) y cercanía
+function score(p){ let s=(DRANK[p.dist]||0)*1.2; if(p.gr!=null){ const conf=Math.min(1,(p.gn||0)/300); s+=(p.gr-3.8)*2.2*(0.45+0.55*conf) } if(p.unv) s-=0.5; if(state.near&&state.geo){const d=pdist(p);s+=Math.max(0,1.5-d/700)} return s }
+function filtered(){
+  const arr=PL.filter(p=>passes(p));
+  const by=state.sort;
+  if(by==='cerca'&&state.geo) arr.sort((a,b)=>pdist(a)-pdist(b));
+  else if(by==='puntaje') arr.sort((a,b)=>(b.gr??0)-(a.gr??0)||(b.gn||0)-(a.gn||0));
+  else if(by==='precio') arr.sort((a,b)=>a.price-b.price||score(b)-score(a));
+  else if(by==='nombre') arr.sort((a,b)=>a.n.localeCompare(b.n,'es'));
+  else if(state.geo&&state.near) arr.sort((a,b)=>pdist(a)-pdist(b));
+  else arr.sort((a,b)=>score(b)-score(a)||a.n.localeCompare(b.n,'es'));
+  return arr}
 const fmtD=m=>m==null?'':m<950?Math.round(m/10)*10+' m':(m/1000).toFixed(1).replace('.',',')+' km';
 const walkMin=m=>Math.max(1,Math.round(m/80));
 
 /* ---------- UI ---------- */
 let cur=[]; let listLimit=120;
-function renderAll(){cur=filtered();renderChips();renderList();countTo($('#cnt'),cur.length);if(state.sel)renderCard(state.sel);if(introDone){anim.pts=0.3;kick()}}
+function renderAll(){cur=filtered();renderChips();renderList();renderMobile();countTo($('#cnt'),cur.length);if(state.sel)renderCard(state.sel);if(introDone&&deckgl){anim.pts=0.3;kick()}}
 function countTo(el,to){const from=+el.dataset.v||0;el.dataset.v=to;if(reduced||from===to){el.textContent=to;return}const t0=performance.now();(function s(n){const k=Math.min(1,(n-t0)/450);el.textContent=Math.round(from+(to-from)*easeOut(k));if(k<1)requestAnimationFrame(s)})(t0)}
 function renderChips(){
   const base=PL.filter(p=>passes(p,true)); const counts={}; base.forEach(p=>counts[p.cat]=(counts[p.cat]||0)+1);
@@ -904,6 +1043,7 @@ function renderCard(id,animate){
         <button class="act been ${u.been?'on':''}" id="aBeen">${u.been?'✓ Ya fui':'Ya fui'}</button>
         <a class="act primary" href="${esc(p.gu||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.n+' '+(p.addr||'')+' Buenos Aires')))}" target="_blank" rel="noopener">Cómo llegar ↗</a>
         <button class="act" id="aRoute">${inRoute?'✕ Sacar de la ruta':'+ Sumar a mi ruta'}</button>
+        ${isMobile()?`<button class="act" id="aMap" style="grid-column:1/-1;border-color:rgba(0,229,255,.5);color:var(--neon2)">Ver dónde queda en el mapa</button>`:''}
       </div>
       <div class="rate"><span>Mi puntaje</span>${[1,2,3,4,5].map(n=>`<button data-r="${n}" class="${(u.rating||0)>=n?'on':''}" aria-label="${n} estrellas">★</button>`).join('')}</div>
       <textarea class="note" id="aNote" placeholder="Notas: qué pedí, con quién fui, qué repetir…">${esc(u.note||'')}</textarea>
@@ -914,12 +1054,13 @@ function renderCard(id,animate){
   $('#aWant').onclick=()=>{setU(id,{want:!u.want});uVer++;renderAll();kick();toast(!u.want?'Anotado en "Quiero ir"':'Sacado de "Quiero ir"')};
   $('#aBeen').onclick=()=>{setU(id,{been:!u.been});uVer++;renderAll();if(!u.been){toast('¡Sellado! Ya fuiste a '+p.n);burst(p);checkPass()}else kick()};
   $('#aRoute').onclick=()=>{toggleRoute(id);renderCard(id)};
+  const am=$('#aMap'); if(am) am.onclick=()=>{ mTab('mapa'); setTimeout(()=>{select(id,true);$('#card').hidden=false},80) };
   $$('#cardBody .rate button').forEach(b=>b.onclick=()=>{const r=+b.dataset.r;setU(id,{rating:u.rating===r?0:r});renderCard(id)});
   let nt; $('#aNote').oninput=e=>{clearTimeout(nt);nt=setTimeout(()=>setU(id,{note:e.target.value.trim()}),600)};
   $('#aShare').onclick=async()=>{const url=location.href.split('#')[0]+'#p='+id;const txt=p.n+' · '+p.sub+' · '+p.barrio;try{if(navigator.share)await navigator.share({title:p.n,text:txt,url});else{await navigator.clipboard.writeText(url);toast('Link copiado')}}catch(e){}};
 }
 function openLandmark(lid){
-  const l=lmById[lid]; if(!l) return;
+  const l=lmById[lid]; if(!l) return; ensureDeck();
   state.sel=null; state.lmSel=lid; state.winner=null;
   const near=placesNear(l), top=near.slice(0,10);
   $('#card').hidden=false; if(isMobile()){$('#drawer').hidden=true;$('#btnList').classList.remove('on')}
@@ -998,7 +1139,7 @@ $('#fabNear').onclick=()=>{
   toast('Buscando dónde estás…');
   navigator.geolocation.getCurrentPosition(pos=>{
     state.geo={lat:pos.coords.latitude,lng:pos.coords.longitude};
-    state.near=true;$('#fabNear').classList.add('on');renderAll();openDrawer(true);
+    state.near=true;$('#fabNear').classList.add('on'); if(isMobile()&&state.sort==='auto') state.sort='cerca'; renderAll(); if(!isMobile()) openDrawer(true);
     flyTo({longitude:state.geo.lng,latitude:state.geo.lat,zoom:14.4,pitch:state.v3d?50:0},{d:1800});
     const n=cur.length; toast(n?`${n} lugares a menos de 20 minutos a pie`:'Nada a 1,5 km. Sacá el filtro "Cerca" para ver más.');
   },()=>toast('No pude obtener tu ubicación. Revisá los permisos.'),{enableHighAccuracy:true,timeout:10000,maximumAge:60000});
@@ -1154,6 +1295,84 @@ document.addEventListener('keydown',e=>{ if(e.target.matches('input,textarea,sel
 let tt; function toast(msg){const t=$('#toast');t.hidden=true;void t.offsetWidth;t.textContent=msg;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2800)}
 $$('.sheet-handle').forEach(h=>{let y0=null;const panel=h.parentElement;h.addEventListener('touchstart',e=>{y0=e.touches[0].clientY},{passive:true});h.addEventListener('touchmove',e=>{if(y0!=null&&e.touches[0].clientY-y0>60){y0=null;if(panel.id==='card')closeCard();else openDrawer(false)}},{passive:true})});
 
+
+/* ================= celular: buscar primero, mapa después ================= */
+const MOBQ=[
+  {k:'cerca',t:'Cerca mío'},{k:'g45',t:'★ 4,5+',cls:'gold'},{k:'barato',t:'Barato'},{k:'michelin',t:'Michelin'},
+  {k:'notable',t:'Bar notable'},{k:'parado',t:'De parado'},{k:'veggie',t:'Veggie'},{k:'tarde',t:'Hasta tarde'},{k:'patio',t:'Con patio'}];
+const SORTS=[['auto','Lo mejor primero'],['puntaje','Puntaje de Google'],['cerca','Más cerca mío'],['precio','Más barato'],['nombre','Nombre (A-Z)']];
+let mLimit=40;
+function mTab(t){
+  if(t==='ruleta'){ $('#fabRuleta').click(); return }
+  M.tab=t; document.body.dataset.mtab=t;
+  $$('#mTabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  if(t==='guardados'){ if(!state.list) setList('want'); }
+  else if(M.prevList!==undefined&&t==='lista'&&state.list==='want'&&M.autoWant){ setList(''); }
+  if(t==='mapa'){ ensureDeck(); closeSheets(); setTimeout(()=>{kick(); if(!state.sel) fitPlaces(cur.slice(0,60))},60) }
+  else { $('#card').hidden=true; state.sel=null }
+  renderMobile(); kick();
+}
+function setList(v){ M.autoWant=(v==='want'); state.list=v; syncFilterUI(); renderAll() }
+function closeSheets(){ $('#mSortSheet').hidden=true; $('#mFiltSheet').hidden=true }
+function mQuickOn(k){
+  if(k==='cerca') return state.near;
+  if(k==='barato') return state.price===1||state.price===2;
+  if(k==='michelin') return state.tags.has('michelin');
+  return state.tags.has(k);
+}
+function mToggleQuick(k){
+  if(k==='cerca'){ $('#fabNear').click(); return }
+  if(k==='barato'){ state.price=(state.price===2?0:2) }
+  else { state.tags.has(k)?state.tags.delete(k):state.tags.add(k) }
+  syncFilterUI(); renderAll();
+}
+function mRowHtml(p,i){
+  const u=ud(p.id), d=state.geo?pdist(p):null, c=CATS[p.cat].c;
+  const tags=[p.dist?`<i class="gold">${p.dist==='star2'?'★★ MICHELIN':p.dist==='star1'?'★ MICHELIN':p.dist==='bib'?'BIB GOURMAND':'MICHELIN'}</i>`:'',
+    u.been?'<i class="been">✓ YA FUI</i>':u.want?'<i class="want">★ QUIERO IR</i>':'',
+    (p.tags||[]).includes('50best')?'<i>50 BEST BARS</i>':'', (p.tags||[]).includes('notable')?'<i>BAR NOTABLE</i>':''].filter(Boolean).join('');
+  return `<div class="mrow" data-id="${p.id}" style="--c:${c}"><span class="mk"></span>${stn(p,'sm')}
+    <div class="t"><b>${esc(p.n)}</b><span>${esc(p.sub)} · ${esc(p.barrio)}</span>${tags?`<div class="tags">${tags}</div>`:''}</div>
+    <div class="rt">${p.gr!=null?`<span class="g">★ ${fmtR(p.gr)}</span>`:''}<span class="pr">${PR[p.price]}</span>${d!=null?`<br>${fmtD(d)}`:''}</div></div>`;
+}
+function renderMobile(){
+  if(!isMobile()) return;
+  $('#mBrandSub').textContent=PL.length+' lugares';
+  const counts={}; PL.filter(p=>passes(p,true)).forEach(p=>counts[p.cat]=(counts[p.cat]||0)+1);
+  $('#mCats').innerHTML=`<button class="mcat ${state.cats.size?'':'on'}" data-c="" style="--c:#f3f5f9"><span class="rnd" style="--c:#f3f5f9"><b>★</b></span>Todo</button>`+
+    Object.entries(CATS).filter(([k])=>counts[k]).map(([k,v])=>`<button class="mcat ${state.cats.has(k)?'on':''}" data-c="${k}" style="--c:${v.c}">${rndCat(k)}${v.s}</button>`).join('');
+  $('#mQuick').innerHTML=MOBQ.filter(q=>q.k!=='g45'||PL.some(p=>p.gr!=null)).map(q=>`<button class="mq ${mQuickOn(q.k)?'on':''} ${q.cls||''}" data-q="${q.k}">${q.t}</button>`).join('');
+  const sortLabel=(SORTS.find(s=>s[0]===state.sort)||SORTS[0])[1];
+  $('#mCount').innerHTML=`<b>${cur.length}</b> lugares · ${esc(sortLabel)}`;
+  $('#mBackN').textContent=cur.length;
+  const saved=PL.filter(p=>ud(p.id).want).length; const sb=$('#mSaved'); sb.hidden=!saved; sb.textContent=saved;
+  const list=$('#mList');
+  if(!cur.length){ list.innerHTML=`<div class="mempty"><b>Nada con esos filtros</b>Probá sacar alguno o buscá otra cosa.<br><button id="mClear2">Limpiar filtros</button></div>`; return }
+  list.innerHTML=cur.slice(0,mLimit).map(mRowHtml).join('')+(cur.length>mLimit?`<div class="mmore"><button class="ghost" id="mMore">Ver ${Math.min(40,cur.length-mLimit)} más</button></div>`:'');
+}
+function mOpen(id){ ensureDeck(); select(id,true); $('#card').hidden=false; }
+function initMobile(){
+  $('#mCats').onclick=e=>{const b=e.target.closest('.mcat');if(!b)return;const k=b.dataset.c;
+    if(!k) state.cats.clear(); else if(state.cats.has(k)&&state.cats.size===1) state.cats.clear(); else {state.cats.clear();state.cats.add(k)}
+    mLimit=40; renderAll(); $('#mList').scrollTop=0};
+  $('#mQuick').onclick=e=>{const b=e.target.closest('.mq');if(b) mToggleQuick(b.dataset.q)};
+  $('#mList').onclick=e=>{ if(e.target.id==='mMore'){mLimit+=40;renderMobile();return} if(e.target.id==='mClear2'){mClearAll();return}
+    const r=e.target.closest('.mrow'); if(r) mOpen(r.dataset.id)};
+  let mt; $('#mq').oninput=e=>{clearTimeout(mt);mt=setTimeout(()=>{state.q=e.target.value.trim();$('#mqClear').hidden=!state.q;mLimit=40;renderAll()},150)};
+  $('#mqClear').onclick=()=>{$('#mq').value='';state.q='';$('#mqClear').hidden=true;renderAll()};
+  $('#mTabs').onclick=e=>{const b=e.target.closest('button');if(b)mTab(b.dataset.t)};
+  $('#mBackBtn').onclick=()=>mTab('lista');
+  $('#mSortBtn').onclick=()=>{ $('#mSortOpts').innerHTML=SORTS.filter(s=>s[0]!=='cerca'||state.geo).map(([k,t])=>`<button class="opt2 ${state.sort===k?'on':''}" data-s="${k}">${t}<span class="ck">${state.sort===k?'✓':''}</span></button>`).join('');
+    $('#mSortSheet').hidden=false };
+  $('#mSortOpts').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;state.sort=b.dataset.s;closeSheets();renderAll()};
+  $('#mFiltBtn').onclick=()=>{ const fb=$('#mFiltBody'); if(!fb.dataset.on){ fb.appendChild($('#segPrice')); fb.appendChild($('#selBarrio')); const row=document.createElement('div'); row.className='optrow'; row.appendChild($('#tagBar')); fb.appendChild(row); fb.dataset.on=1 }
+    $('#mFiltN').textContent=cur.length; $('#mFiltSheet').hidden=false };
+  $('#mFiltClear').onclick=mClearAll;
+  $$('[data-close-sheet]').forEach(b=>b.onclick=closeSheets);
+  $$('.msheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeSheets()}));
+}
+function mClearAll(){ state.cats.clear(); state.tags.clear(); state.price=0; state.barrio=''; state.list=''; state.only=null; state.onlyLabel=''; state.q=''; const q=$('#mq'); if(q)q.value=''; $('#mqClear').hidden=true; syncFilterUI(); mLimit=40; renderAll(); closeSheets() }
+
 /* ---------- arranque ---------- */
 function intro(){
   const T='Mapa del Morfi'; $('#splashT').innerHTML=[...T].map((c,i)=>c===' '?'<span>&nbsp;</span>':`<span style="animation-delay:${120+Math.random()*700|0}ms">${c}</span>`).join('');
@@ -1165,9 +1384,18 @@ function intro(){
 }
 function start(){
   syncFilterUI(); syncViews(); buildRoute();
+  if(isMobile()){
+    initMobile(); document.body.dataset.mtab='lista'; $('#mShell').hidden=false; $('#mTabs').hidden=false;
+    cur=filtered(); renderMobile();
+    $('#splash').classList.add('out');
+    const hp=location.hash.match(/#p=([a-z0-9-]+)/); if(hp&&byId[hp[1]]) setTimeout(()=>mOpen(hp[1]),300);
+    const hh=location.hash.match(/#h=([a-z0-9-]+)/); if(hh) setTimeout(()=>{mTab('mapa');openLandmark(hh[1])},300);
+    if(location.hash==='#ruleta') setTimeout(()=>$('#fabRuleta').click(),400);
+    initDb(); return;
+  }
   cur=filtered(); renderChips(); renderList(); $('#cnt').textContent=cur.length; $('#cnt').dataset.v=cur.length;
   $('#brandSub').textContent=PL.length+' lugares · Buenos Aires';
-  const ok=initDeck();
+  deckTried=true; const ok=initDeck();
   if(ok){
     fontsPending=true;
     const fl=document.fonts&&document.fonts.load?Promise.all([document.fonts.load('48px "Dela Gothic One"'),document.fonts.load('700 16px "Zen Kaku Gothic New"')]):Promise.resolve();
@@ -1183,7 +1411,11 @@ function start(){
 }
 const hot=window.claude&&window.claude.hot;
 if(hot&&hot.ready){hot.snapshot(()=>({sel:state.sel}));hot.ready(d=>{start();if(d&&d.sel&&byId[d.sel])setTimeout(()=>select(d.sel,false),300)})}else start();
-mobileMQ.addEventListener('change',()=>{if(isMobile()&&!$('#drawer').hidden&&!$('#card').hidden)openDrawer(false)});
+mobileMQ.addEventListener('change',()=>{
+  if(isMobile()){ initMobile(); document.body.dataset.mtab=M.tab||'lista'; $('#mShell').hidden=false; $('#mTabs').hidden=false; openDrawer(false); renderMobile() }
+  else { document.body.removeAttribute('data-mtab'); $('#mShell').hidden=true; $('#mTabs').hidden=true; ensureDeck(); const fb=$('#mFiltBody'); if(fb&&fb.dataset.on){ const d=$('#drawer .fbar'); if(d){ d.appendChild($('#segPrice')); d.appendChild($('#segList')); d.appendChild($('#selBarrio')); d.appendChild($('#tagBar')) } fb.dataset.on='' } }
+  kick();
+});
 window.addEventListener('resize',()=>{computeHome();kick()});
 })();
 </script>
@@ -1191,7 +1423,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div id="install" class="glass" hidden><span>Instalá Mapa del Morfi</span><button id="installYes">Instalar</button><button class="no" id="installNo" aria-label="Ahora no">✕</button></div>
 <script>
 /* app instalable: service worker para usar sin internet y botón de instalar */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=4699173d1a').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=82965da9a1').catch(()=>{})) }
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};setTimeout(()=>ib.hidden=false,4500)});
 document.getElementById('installYes').onclick=async()=>{ib.hidden=true;if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
