@@ -517,7 +517,7 @@
     <div class="sheet-handle"></div>
     <div class="ph"><h2 id="drawerTitle">Lugares</h2><span class="sub" id="drawerSub"></span><button class="x" id="drawerClose" aria-label="Cerrar lista">✕</button></div>
     <div class="fbar">
-      <div class="seg" id="segPrice" title="Presupuesto máximo"><button data-p="0" class="on">Todo</button><button data-p="1">$</button><button data-p="2">$$</button><button data-p="3">$$$</button><button data-p="4">$$$$</button></div>
+      <div class="seg" id="segPrice" title="Precio exacto"><button data-p="0" class="on">Todo</button><button data-p="1">$</button><button data-p="2">$$</button><button data-p="3">$$$</button><button data-p="4">$$$$</button></div>
       <div class="seg" id="segList" title="Mis listas"><button data-l="" class="on">Todos</button><button data-l="want">Quiero ir</button><button data-l="been">Ya fui</button><button data-l="todo">Pendientes</button></div>
       <select class="sel" id="selBarrio" aria-label="Barrio"><option value="">Todos los barrios</option></select>
       <div id="tagBar" style="display:contents"></div>
@@ -553,7 +553,7 @@
     </div>
     <div class="mcats" id="mCats"></div>
     <div class="mquick" id="mQuick"></div>
-    <div class="mmeta"><span id="mCount"></span><span class="sp"><button id="mSortBtn">Ordenar</button><button id="mFiltBtn">Filtros</button></span></div>
+    <div class="mmeta"><span id="mCount"></span><span class="sp"><button id="mVerMapa" hidden>Ver en el mapa</button><button id="mSortBtn">Ordenar</button><button id="mFiltBtn">Filtros</button></span></div>
     <div class="mlist" id="mList"></div>
   </div>
 
@@ -581,7 +581,7 @@
       <div class="mb">
         <div class="opt"><label>Tengo ganas de</label><div class="optrow" id="rCats"></div></div>
         <div class="optrow" style="margin-bottom:6px">
-          <div class="seg" id="rPrice"><button data-p="0" class="on">Cualquier precio</button><button data-p="1">$</button><button data-p="2">$$</button><button data-p="3">$$$</button></div>
+          <div class="seg" id="rPrice"><button data-p="0" class="on">Cualquier precio</button><button data-p="1">$</button><button data-p="2">$$</button><button data-p="3">$$$</button><button data-p="4">$$$$</button></div>
           <button class="tag" id="rTodo">Solo pendientes</button>
           <button class="tag" id="rNear">Cerca mío</button>
         </div>
@@ -651,7 +651,7 @@ const easeOut=t=>1-Math.pow(1-t,3);
 /* ---------- estado ---------- */
 const M={tab:'lista',autoWant:false};
 const NEARR=[500,1000,1500,3000,5000];
-const state={cats:new Set(),price:0,tags:new Set(),barrio:'',q:'',list:'',near:false,nearR:1500,nearBusy:false,only:null,onlyLabel:'',sel:null,route:[],geo:null,sound:true,sort:'auto',
+const state={cats:new Set(),price:0,tags:new Set(),barrio:'',q:'',list:'',near:false,nearR:1500,nearBusy:false,barato:false,only:null,onlyLabel:'',sel:null,route:[],geo:null,sound:true,sort:'auto',
   v3d:true,lm:true,lmSel:null,heat:false,trains:true,orbit:false,hoverBarrio:null,winner:null};
 let U={};
 const LS='morfi.v1';
@@ -759,13 +759,14 @@ function initDeck(){
       getCursor:({isHovering,isDragging})=>isDragging?'grabbing':isHovering?'pointer':'grab',
       onHover, onClick,
       useDevicePixels:Math.min(window.devicePixelRatio||1,2),
+      pickingRadius:6,
       onError:e=>console.warn('deck',e),
       layers:[]
     });
   }catch(e){ console.error(e); $('#stage').innerHTML='<div class="empty" style="padding-top:30vh"><b>Tu navegador no pudo iniciar WebGL</b>Probá con Chrome o Edge actualizados.</div>'; return false }
   return true;
 }
-window.morfi={get zoom(){return vs.zoom},get lod(){return LOD},get filtro(){return filtroActivo()},get cur(){return cur.length}};
+window.morfi={deck:()=>deckgl,pick:(x,y,r=8)=>{const i=deckgl.pickObject({x,y,radius:r});return i&&{layer:i.layer.id,obj:i.object&&(i.object.n||i.object.id)}},capas:()=>deckgl.props.layers.map(l=>l.id+(l.props.pickable?'*':'')),get zoom(){return vs.zoom},get lod(){return LOD},get filtro(){return filtroActivo()},get cur(){return cur.length}};
 let zq=null; function zoomChanged(){const q=Math.round(vs.zoom*4)/4; if(q!==zq){ const antes=zq; zq=q;
   if(antes!=null&&antes>=LOD.puntosDestacados&&q<LOD.puntosDestacados&&!filtroActivo()) toast('Vista general: elegí un barrio o acercate para ver los lugares');
   if(!raf) draw() }}
@@ -780,10 +781,11 @@ const LOD={
   hitos:12.2, hitosTodos:13.4,           // monumentos en 3D
   carteHitos:12.6, carteHitosTodos:13.8, // sus carteles
   carteBarrios:15.4,  // los nombres de barrio se apagan al acercarse mucho
-  carteLugares:14.6
+  carteLugares:14.6,
+  tocarLugares:13.2   // más lejos que esto, tocar el mapa elige el barrio, no un lugar suelto
 };
 // si elegiste una zona o un filtro, los lugares se ven aunque estés lejos
-const filtroActivo=()=>!!(state.barrio||state.cats.size||state.tags.size||state.price||state.q||state.only||state.near||state.list);
+const filtroActivo=()=>!!(state.barrio||state.cats.size||state.tags.size||state.price||state.barato||state.q||state.only||state.near||state.list);
 const destacado=p=>!!p.dist||(p.gr!=null&&p.gr>=4.6&&(p.gn||0)>=400)||(p.tags||[]).includes('50best');
 const radiusPx=()=>clamp(2.8+(vs.zoom-10.5)*1.15,3.2,10.5);
 
@@ -868,7 +870,7 @@ function layers(now){
   L.push(new D.ScatterplotLayer({id:'halo',data:dots,getPosition:p=>[p.lng,p.lat],getRadius:1,radiusScale:rp*2.7,radiusUnits:'pixels',getFillColor:p=>[...CC[p.cat],40],opacity:1-anim.heat,parameters:flat}));
   L.push(new D.ScatterplotLayer({id:'puntos',data:dots,getPosition:p=>[p.lng,p.lat],getRadius:p=>p.approx?.8:1,radiusScale:rp,radiusUnits:'pixels',getFillColor:p=>[...CC[p.cat],255],opacity:dotOp,stroked:true,
     getLineColor:p=>{const u=ud(p.id);return u.been?[61,255,158,255]:u.want?[255,212,0,255]:[4,5,8,235]},getLineWidth:p=>{const u=ud(p.id);return (u.been||u.want)?2.2:1.2},lineWidthUnits:'pixels',
-    pickable:true,autoHighlight:true,highlightColor:[255,255,255,110],parameters:flat,updateTriggers:{getLineColor:uVer,getLineWidth:uVer}}));
+    pickable:zNow>=LOD.tocarLugares,autoHighlight:true,highlightColor:[255,255,255,110],parameters:flat,updateTriggers:{getLineColor:uVer,getLineWidth:uVer}}));
   if(rpts.length) L.push(new D.ScatterplotLayer({id:'ruta-n',data:rpts,getPosition:p=>[p.lng,p.lat],getRadius:11,radiusUnits:'pixels',getFillColor:[255,255,255,255],stroked:true,getLineColor:[255,212,0,255],lineWidthUnits:'pixels',getLineWidth:3,lineWidthMinPixels:2,pickable:true,parameters:flat}));
   if(state.near&&state.geo) L.push(new D.ScatterplotLayer({id:'yo',data:[[state.geo.lng,state.geo.lat]],getPosition:d=>d,getRadius:1,radiusScale:7+2*Math.sin(t*3),radiusUnits:'pixels',getFillColor:[0,229,255,255],stroked:true,getLineColor:[255,255,255,255],lineWidthMinPixels:2,parameters:flat}));
   if(zNow>=LOD.estaciones) L.push(new D.ScatterplotLayer({id:'estaciones',data:STATIONS,getPosition:d=>d.p,getRadius:3,radiusUnits:'pixels',getFillColor:[225,220,255,230],getLineColor:[4,5,8,255],stroked:true,lineWidthMinPixels:1,pickable:true,parameters:flat}));
@@ -892,7 +894,7 @@ function layers(now){
   if(fontsReady){
     const LB=labels(now);
     if(zNow<13.2) L.push(new D.TextLayer({id:'rio',data:RIVER_T,getPosition:d=>d.p,getText:d=>d.t,getSize:11,sizeUnits:'pixels',getColor:[0,229,255,90],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'auto',getAngle:-38,billboard:false,parameters:flat,fontSettings:{sdf:true,fontSize:40,buffer:6}}));
-    if(stars.length) L.push(new D.TextLayer({id:'estrellas',data:stars,getPosition:p=>[p.lng,p.lat,pillar(p)],getText:p=>p.dist==='star2'?'★★':'★',getSize:20,sizeScale:pa*(1+0.08*Math.sin(t*2.2)),sizeUnits:'pixels',getColor:[255,212,0,255],outlineWidth:3,outlineColor:[40,24,0,255],fontSettings:{sdf:true,fontSize:64,buffer:8},fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'★',billboard:true,pickable:true,getTextAnchor:'middle',getAlignmentBaseline:'center',parameters:flat,updateTriggers:{getPosition:[anim.elev,zq,is3d]}}));
+    if(stars.length) L.push(new D.TextLayer({id:'estrellas',data:stars,getPosition:p=>[p.lng,p.lat,pillar(p)],getText:p=>p.dist==='star2'?'★★':'★',getSize:20,sizeScale:pa*(1+0.08*Math.sin(t*2.2)),sizeUnits:'pixels',getColor:[255,212,0,255],outlineWidth:3,outlineColor:[40,24,0,255],fontSettings:{sdf:true,fontSize:64,buffer:8},fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'★',billboard:true,pickable:zNow>=LOD.tocarLugares,getTextAnchor:'middle',getAlignmentBaseline:'center',parameters:flat,updateTriggers:{getPosition:[anim.elev,zq,is3d]}}));
     const conCuenta=zNow<LOD.puntosDestacados&&!filtroActivo();
     if(LB.b.length) L.push(new D.TextLayer({id:'barrio-t',data:LB.b,getPosition:b=>[b.c[0],b.c[1]],getText:b=>conCuenta&&b.t?b.n.toUpperCase()+'  '+b.t:b.n.toUpperCase(),getSize:clamp(8.5+(zNow-11)*1.6,8.5,13),sizeUnits:'pixels',
       getColor:b=>state.barrio===b.n?[0,229,255,255]:[180,192,214,Math.round(clamp((LOD.carteBarrios-zNow)/1.2,0,1)*(dimOthers?70:125))],
@@ -991,9 +993,19 @@ function onClick(info){
 }
 function barrioBounds(n){const b=BARRIOS.find(x=>x.n===n); if(!b) return null; const xs=b.rings[0].map(p=>p[0]), ys=b.rings[0].map(p=>p[1]); return [[Math.min(...xs),Math.min(...ys)],[Math.max(...xs),Math.max(...ys)]]}
 function toggleBarrio(n){
-  state.barrio=(state.barrio===n?'':n); listLimit=120; mLimit=40; syncFilterUI(); renderAll(); kick();
-  if(isMobile()){ if(state.barrio){ $('#card').hidden=true; state.sel=null; mTab('lista'); const l=$('#mList'); if(l) l.scrollTop=0; toast(`${cur.length} lugares en ${n}`) } return }
-  if(state.barrio){ const bb=barrioBounds(n); if(bb){ openDrawer(true); fitBounds(bb,{drawer:true,maxZoom:15.5}) } }
+  const cerca=vs.zoom>=LOD.tocarLugares;
+  const yaEstaba=state.barrio===n;
+  // de cerca, volver a tocar el mismo barrio no lo apaga (se saca con la ✕ o con Limpiar filtros)
+  state.barrio=(yaEstaba&&!cerca)?'':n;
+  listLimit=120; mLimit=40; syncFilterUI(); renderAll(); kick();
+  if(!state.barrio) return;
+  const bb=barrioBounds(n);
+  if(isMobile()){
+    if(cerca){ toast(`${cur.length} lugares en ${n} · tocá uno para ver la ficha`); return }   // ya estás adentro: solo filtra
+    $('#card').hidden=true; state.sel=null; mTab('lista'); const l=$('#mList'); if(l) l.scrollTop=0;   // de lejos: la lista del barrio
+    toast(`${cur.length} lugares en ${n}`); return;
+  }
+  if(bb){ openDrawer(true); fitBounds(bb,{drawer:true,maxZoom:15.5}) }
 }
 
 /* ---------- filtros ---------- */
@@ -1002,7 +1014,8 @@ const pdist=p=>state.geo?dist(state.geo.lat,state.geo.lng,p.lat,p.lng):null;
 function passes(p,ignoreCat){
   if(state.only&&!state.only.has(p.id)) return false;
   if(!ignoreCat&&state.cats.size&&!state.cats.has(p.cat)) return false;
-  if(state.price&&p.price>state.price) return false;
+  if(state.price&&p.price!==state.price) return false;   // precio exacto, no "hasta"
+  if(state.barato&&p.price>2) return false;
   if(state.barrio&&p.barrio!==state.barrio) return false;
   for(const t of state.tags){ if(t==='g45'){ if(!(p.gr>=4.5)) return false; continue } if(!(p.tags||[]).includes(t)) return false; }
   const u=ud(p.id);
@@ -1297,7 +1310,7 @@ $('#rCats').onclick=e=>{const b=e.target.closest('.tag');if(!b||spinning)return;
 $('#rPrice').onclick=e=>{const b=e.target.closest('button');if(!b||spinning)return;rPrice=+b.dataset.p;$$('#rPrice button').forEach(x=>x.classList.toggle('on',x===b));fillReel()};
 $('#rTodo').onclick=e=>{if(spinning)return;rTodo=!rTodo;e.target.classList.toggle('on',rTodo);fillReel()};
 $('#rNear').onclick=e=>{ if(spinning)return; if(!state.geo){toast('Primero tocá "Cerca" para ubicarte');return} rNear=!rNear;e.target.classList.toggle('on',rNear);fillReel()};
-const rCands=()=>PL.filter(p=>(!rCat||p.cat===rCat)&&(!rPrice||p.price<=rPrice)&&(!rTodo||!ud(p.id).been)&&(!rNear||!state.geo||pdist(p)<=2500));
+const rCands=()=>PL.filter(p=>(!rCat||p.cat===rCat)&&(!rPrice||p.price===rPrice)&&(!rTodo||!ud(p.id).been)&&(!rNear||!state.geo||pdist(p)<=2500));
 const CELL=70, REEL_OFF=60; // la ventana ganadora está centrada: 190/2 - 70/2 = 60
 const cellHtml=p=>`<div class="cell"><b style="color:${CATS[p.cat].c};text-shadow:0 0 14px ${CATS[p.cat].c}88">${esc(p.n)}</b><span style="color:var(--muted)">${esc(p.code)} · ${esc(p.sub)} · ${esc(p.barrio)}</span></div>`;
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
@@ -1361,7 +1374,7 @@ $$('.sheet-handle').forEach(h=>{let y0=null;const panel=h.parentElement;h.addEve
 
 /* ================= celular: buscar primero, mapa después ================= */
 const MOBQ=[
-  {k:'cerca',t:'Cerca mío'},{k:'g45',t:'★ 4,5+',cls:'gold'},{k:'barato',t:'Barato'},{k:'michelin',t:'Michelin'},
+  {k:'cerca',t:'Cerca mío'},{k:'g45',t:'★ 4,5+',cls:'gold'},{k:'barato',t:'Barato ($ y $$)'},{k:'michelin',t:'Michelin'},
   {k:'notable',t:'Bar notable'},{k:'parado',t:'De parado'},{k:'veggie',t:'Veggie'},{k:'tarde',t:'Hasta tarde'},{k:'patio',t:'Con patio'}];
 const SORTS=[['auto','Lo mejor primero'],['puntaje','Puntaje de Google'],['cerca','Más cerca mío'],['precio','Más barato'],['nombre','Nombre (A-Z)']];
 let mLimit=40;
@@ -1379,7 +1392,7 @@ function setList(v){ M.autoWant=(v==='want'); state.list=v; syncFilterUI(); rend
 function closeSheets(){ $('#mSortSheet').hidden=true; $('#mFiltSheet').hidden=true }
 function mQuickOn(k){
   if(k==='cerca') return state.near;
-  if(k==='barato') return state.price===1||state.price===2;
+  if(k==='barato') return state.barato;
   if(k==='michelin') return state.tags.has('michelin');
   return state.tags.has(k);
 }
@@ -1388,7 +1401,7 @@ function mToggleQuick(k){
   if(k==='__barrio'){ state.barrio=''; syncFilterUI(); mLimit=40; renderAll(); kick(); return }
   if(k==='__radio'){ const i=NEARR.indexOf(state.nearR); state.nearR=NEARR[(i+1)%NEARR.length]; mLimit=40; renderAll(); toast('Mostrando lugares a '+fmtD(state.nearR)); return }
   if(k==='cerca'){ askNear(); return }
-  if(k==='barato'){ state.price=(state.price===2?0:2) }
+  if(k==='barato'){ state.barato=!state.barato }
   else { state.tags.has(k)?state.tags.delete(k):state.tags.add(k) }
   syncFilterUI(); renderAll();
 }
@@ -1417,6 +1430,7 @@ function renderMobile(){
   const sortLabel=(SORTS.find(s=>s[0]===state.sort)||SORTS[0])[1];
   $('#mCount').innerHTML=`<b>${cur.length}</b> lugares · ${esc(sortLabel)}`;
   const filtroTxt=state.barrio||(state.cats.size===1?CATS[[...state.cats][0]].l:state.onlyLabel||'');
+  const bm=$('#mVerMapa'); if(bm) bm.hidden=!state.barrio;
   $('#mBackTxt').innerHTML=filtroTxt?`${esc(filtroTxt)}: <b id="mBackN">${cur.length}</b>`:`Resultados: <b id="mBackN">${cur.length}</b>`;
   const fn=$('#mFiltN'); if(fn) fn.textContent=cur.length;
   const saved=PL.filter(p=>ud(p.id).want).length; const sb=$('#mSaved'); sb.hidden=!saved; sb.textContent=saved;
@@ -1436,6 +1450,7 @@ function initMobile(){
   $('#mqClear').onclick=()=>{$('#mq').value='';state.q='';$('#mqClear').hidden=true;renderAll()};
   $('#mTabs').onclick=e=>{const b=e.target.closest('button');if(b)mTab(b.dataset.t)};
   $('#mBackBtn').onclick=()=>mTab('lista');
+  $('#mVerMapa').onclick=()=>{ mTab('mapa'); const bb=state.barrio&&barrioBounds(state.barrio); setTimeout(()=>{ if(bb) fitBounds(bb,{maxZoom:15}); else fitPlaces(cur.slice(0,60)) },120) };
   $('#mSortBtn').onclick=()=>{ $('#mSortOpts').innerHTML=SORTS.filter(s=>s[0]!=='cerca'||state.geo).map(([k,t])=>`<button class="opt2 ${state.sort===k?'on':''}" data-s="${k}">${t}<span class="ck">${state.sort===k?'✓':''}</span></button>`).join('');
     $('#mSortSheet').hidden=false };
   $('#mSortOpts').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;state.sort=b.dataset.s;closeSheets();renderAll()};
@@ -1445,7 +1460,7 @@ function initMobile(){
   $$('[data-close-sheet]').forEach(b=>b.onclick=closeSheets);
   $$('.msheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeSheets()}));
 }
-function mClearAll(){ state.cats.clear(); state.tags.clear(); state.price=0; state.barrio=''; state.list=''; state.only=null; state.onlyLabel=''; state.q=''; state.near=false; state.sort='auto'; M.autoWant=false;
+function mClearAll(){ state.cats.clear(); state.tags.clear(); state.price=0; state.barato=false; state.barrio=''; state.list=''; state.only=null; state.onlyLabel=''; state.q=''; state.near=false; state.sort='auto'; M.autoWant=false;
   const q=$('#mq'); if(q)q.value=''; $('#mqClear').hidden=true; $('#fabNear').classList.remove('on'); syncFilterUI(); mLimit=40; renderAll(); kick(); closeSheets(); toast('Filtros limpios') }
 
 /* ---------- arranque ---------- */
@@ -1499,7 +1514,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=42cf37508a').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=c22f4de6df').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
