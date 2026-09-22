@@ -873,7 +873,7 @@ function layers(now){
     pickable:zNow>=LOD.tocarLugares,autoHighlight:true,highlightColor:[255,255,255,110],parameters:flat,updateTriggers:{getLineColor:uVer,getLineWidth:uVer}}));
   if(rpts.length) L.push(new D.ScatterplotLayer({id:'ruta-n',data:rpts,getPosition:p=>[p.lng,p.lat],getRadius:11,radiusUnits:'pixels',getFillColor:[255,255,255,255],stroked:true,getLineColor:[255,212,0,255],lineWidthUnits:'pixels',getLineWidth:3,lineWidthMinPixels:2,pickable:true,parameters:flat}));
   if(state.near&&state.geo) L.push(new D.ScatterplotLayer({id:'yo',data:[[state.geo.lng,state.geo.lat]],getPosition:d=>d,getRadius:1,radiusScale:7+2*Math.sin(t*3),radiusUnits:'pixels',getFillColor:[0,229,255,255],stroked:true,getLineColor:[255,255,255,255],lineWidthMinPixels:2,parameters:flat}));
-  if(zNow>=LOD.estaciones) L.push(new D.ScatterplotLayer({id:'estaciones',data:STATIONS,getPosition:d=>d.p,getRadius:3,radiusUnits:'pixels',getFillColor:[225,220,255,230],getLineColor:[4,5,8,255],stroked:true,lineWidthMinPixels:1,pickable:true,parameters:flat}));
+  if(zNow>=LOD.estaciones) L.push(new D.ScatterplotLayer({id:'estaciones',data:STATIONS,getPosition:d=>d.p,getRadius:3,radiusUnits:'pixels',getFillColor:[225,220,255,230],getLineColor:[4,5,8,255],stroked:true,lineWidthMinPixels:1,pickable:!isMobile(),parameters:flat}));
   [selP,winP].filter(Boolean).forEach((p,i)=>{ const c=CC[p.cat]; const ph=(t*1.1+i*.5)%1;
     L.push(new D.ScatterplotLayer({id:'onda'+i,data:[p],getPosition:q=>[q.lng,q.lat],getRadius:1,radiusScale:radiusPx()*(1.6+ph*5.5),radiusUnits:'pixels',filled:false,stroked:true,getLineColor:[...c,255],opacity:1-ph,lineWidthMinPixels:2,parameters:flat})) });
   // ---- objetos 3D (con profundidad) ----
@@ -987,8 +987,14 @@ function onHover(info){
 function onClick(info){
   const o=info.object, id=info.layer&&info.layer.id;
   if(o&&isPlaceLayer(id)){ select(o.id,true); return }
-  if(o&&id&&id.startsWith('lm-')){ openLandmark(o.id); return }
+  if(o&&id&&id.startsWith('lm-')&&id!=='lm-t'){ openLandmark(o.id); return }
   if(o&&id==='barrios'){ toggleBarrio(o.n); return }
+  // el toque cayó en algo que no abre nada (una estación, la base de un monumento, una calle):
+  // buscamos el barrio que hay debajo para que siempre lleve a su lista
+  try{
+    const b=deckgl.pickObject({x:info.x,y:info.y,radius:10,layerIds:['barrios']});
+    if(b&&b.object){ toggleBarrio(b.object.n); return }
+  }catch(e){}
   if(state.sel) closeCard();
 }
 function barrioBounds(n){const b=BARRIOS.find(x=>x.n===n); if(!b) return null; const xs=b.rings[0].map(p=>p[0]), ys=b.rings[0].map(p=>p[1]); return [[Math.min(...xs),Math.min(...ys)],[Math.max(...xs),Math.max(...ys)]]}
@@ -1513,7 +1519,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=968d3818e8').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=9c75b4b676').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
