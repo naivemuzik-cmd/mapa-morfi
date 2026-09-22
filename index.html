@@ -435,7 +435,15 @@
     #mBack{position:absolute;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top,0px));z-index:37;display:none;align-items:center;gap:9px;height:42px;padding:0 8px 0 14px;border-radius:4px;font-size:13px;font-weight:700;white-space:nowrap;max-width:calc(100% - 24px)}
     body[data-mtab="mapa"] #mBack{display:flex}
     #mBack b{color:var(--neon2);font-family:var(--mono)}
+    #mZona{position:absolute;left:10px;right:10px;bottom:calc(66px + env(safe-area-inset-bottom,0px));z-index:37;display:none;align-items:center;gap:10px;padding:10px 10px 10px 14px;border-radius:4px;border-left:3px solid var(--neon2)}
+    body[data-mtab="mapa"] #mZona{display:flex}
+    #mZona span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+    #mZona b{font-family:var(--display);font-weight:400;font-size:16px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #mZona i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+    #mZona button{flex:none;background:var(--neon2);color:#06070b;font-weight:700;font-size:13px;border-radius:3px;padding:10px 14px}
+    #mZona.vacia button{display:none}
     #mBack .x2{background:rgba(255,255,255,.08);border-radius:3px;padding:8px 10px;font-size:12px}
+    body[data-mtab="mapa"] .card:not([hidden]) ~ #mZona{display:none}
     .card{bottom:calc(58px + env(safe-area-inset-bottom,0px));max-height:78%;background:rgba(7,9,14,.99);box-shadow:0 -24px 70px rgba(0,0,0,.85),inset 0 1px 0 var(--glass-hi)}
     body:not([data-mtab="mapa"]) .card:before{content:"";position:fixed;inset:0;background:rgba(3,4,7,.5);z-index:-1}
     [hidden]{display:none!important}
@@ -558,6 +566,7 @@
   </div>
 
   <div id="mBack" class="glass"><span id="mBackTxt">Resultados: <b id="mBackN">0</b></span><button class="x2" id="mBackBtn">Ver lista</button></div>
+  <div id="mZona" class="glass"><span><b id="mZonaN">—</b><i id="mZonaC"></i></span><button id="mZonaBtn">Ver los lugares</button></div>
 
   <nav id="mTabs" hidden aria-label="Secciones">
     <button data-t="lista" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Buscar</button>
@@ -754,7 +763,7 @@ function initDeck(){
         const v={...viewState};
         v.longitude=clamp(v.longitude,-58.62,-58.25); v.latitude=clamp(v.latitude,-34.76,-34.47);
         if(interactionState&&(interactionState.isDragging||interactionState.isZooming||interactionState.isRotating||interactionState.isPanning)&&state.orbit) setOrbit(false);
-        vs=v; zoomChanged(); return v;
+        vs=v; zoomChanged(); refrescarZona(); return v;
       },
       getCursor:({isHovering,isDragging})=>isDragging?'grabbing':isHovering?'pointer':'grab',
       onHover, onClick,
@@ -782,7 +791,7 @@ const LOD={
   carteHitos:12.6, carteHitosTodos:13.8, // sus carteles
   carteBarrios:15.4,  // los nombres de barrio se apagan al acercarse mucho
   carteLugares:14.6,
-  tocarLugares:13.2   // más lejos que esto, tocar el mapa elige el barrio, no un lugar suelto
+  tocarLugares:14.0   // más lejos que esto, tocar el mapa elige el barrio, no un lugar suelto
 };
 // si elegiste una zona o un filtro, los lugares se ven aunque estés lejos
 const filtroActivo=()=>!!(state.barrio||state.cats.size||state.tags.size||state.price||state.barato||state.q||state.only||state.near||state.list);
@@ -996,6 +1005,21 @@ function onClick(info){
     if(b&&b.object){ toggleBarrio(b.object.n); return }
   }catch(e){}
   if(state.sel) closeCard();
+}
+let zonaActual=null;
+function barrioEnCentro(){
+  for(const b of BARRIOS){ if(b.rings.some(r=>pip(vs.longitude,vs.latitude,r))) return b }
+  return null;
+}
+function refrescarZona(){
+  const el=$('#mZona'); if(!el||!isMobile()) return;
+  const b=barrioEnCentro(); zonaActual=b;
+  if(!b){ el.classList.add('vacia'); $('#mZonaN').textContent='Fuera de la Capital'; $('#mZonaC').textContent='Movete sobre la ciudad'; return }
+  el.classList.remove('vacia');
+  const n=PL.filter(p=>p.barrio===b.n).length;
+  $('#mZonaN').textContent=b.n;
+  $('#mZonaC').textContent=(state.barrio===b.n?'Filtrando este barrio · ':'')+n+' lugares';
+  $('#mZonaBtn').textContent=state.barrio===b.n?'Ver la lista':'Ver los '+n;
 }
 function barrioBounds(n){const b=BARRIOS.find(x=>x.n===n); if(!b) return null; const xs=b.rings[0].map(p=>p[0]), ys=b.rings[0].map(p=>p[1]); return [[Math.min(...xs),Math.min(...ys)],[Math.max(...xs),Math.max(...ys)]]}
 function toggleBarrio(n){
@@ -1389,7 +1413,7 @@ function mTab(t){
   $$('#mTabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
   if(t==='guardados'){ if(!state.list) setList('want'); }
   else if(M.prevList!==undefined&&t==='lista'&&state.list==='want'&&M.autoWant){ setList(''); }
-  if(t==='mapa'){ ensureDeck(); closeSheets(); $('#mFiltSheet').hidden=true; setTimeout(()=>{kick(); if(!state.sel) fitPlaces(cur.slice(0,60))},60) }
+  if(t==='mapa'){ ensureDeck(); closeSheets(); $('#mFiltSheet').hidden=true; setTimeout(refrescarZona,200); setTimeout(()=>{kick(); if(!state.sel) fitPlaces(cur.slice(0,60))},60) }
   else { $('#card').hidden=true; state.sel=null }
   renderMobile(); kick();
 }
@@ -1455,6 +1479,9 @@ function initMobile(){
   $('#mqClear').onclick=()=>{$('#mq').value='';state.q='';$('#mqClear').hidden=true;renderAll()};
   $('#mTabs').onclick=e=>{const b=e.target.closest('button');if(b)mTab(b.dataset.t)};
   $('#mBackBtn').onclick=()=>mTab('lista');
+  $('#mZonaBtn').onclick=()=>{ const b=zonaActual||barrioEnCentro(); if(!b) return;
+    if(state.barrio!==b.n){ state.barrio=b.n; listLimit=120; mLimit=40; syncFilterUI(); renderAll() }
+    $('#card').hidden=true; state.sel=null; mTab('lista'); const l=$('#mList'); if(l) l.scrollTop=0; };
   $('#mVerMapa').onclick=()=>{ mTab('mapa'); const bb=state.barrio&&barrioBounds(state.barrio); setTimeout(()=>{ if(bb) fitBounds(bb,{maxZoom:15}); else fitPlaces(cur.slice(0,60)) },120) };
   $('#mSortBtn').onclick=()=>{ $('#mSortOpts').innerHTML=SORTS.filter(s=>s[0]!=='cerca'||state.geo).map(([k,t])=>`<button class="opt2 ${state.sort===k?'on':''}" data-s="${k}">${t}<span class="ck">${state.sort===k?'✓':''}</span></button>`).join('');
     $('#mSortSheet').hidden=false };
@@ -1481,7 +1508,7 @@ function start(){
   syncFilterUI(); syncViews(); buildRoute();
   if(isMobile()){
     initMobile(); document.body.dataset.mtab='lista'; $('#mShell').hidden=false; $('#mTabs').hidden=false;
-    cur=filtered(); renderMobile();
+    cur=filtered(); renderMobile(); setTimeout(refrescarZona,300);
     $('#splash').classList.add('out');
     const hp=location.hash.match(/#p=([a-z0-9-]+)/); if(hp&&byId[hp[1]]) setTimeout(()=>mOpen(hp[1]),300);
     const hh=location.hash.match(/#h=([a-z0-9-]+)/); if(hh) setTimeout(()=>{mTab('mapa');openLandmark(hh[1])},300);
@@ -1519,7 +1546,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=9c75b4b676').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=b2902181f1').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
