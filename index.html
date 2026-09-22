@@ -384,6 +384,7 @@
     .mquick::-webkit-scrollbar{display:none}
     .mq{flex:none;height:34px;padding:0 13px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
     .mq.on{border-color:var(--neon2);color:var(--neon2);background:rgba(0,229,255,.1)}
+    .mq.clear{border-color:var(--neon);color:#fff;background:rgba(255,45,85,.18)}
     .mq.on.gold{border-color:var(--sign);color:var(--sign);background:rgba(255,212,0,.1)}
 
     .mmeta{display:flex;align-items:center;gap:10px;padding:2px 14px 8px;flex:none;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
@@ -556,7 +557,7 @@
     <div class="mlist" id="mList"></div>
   </div>
 
-  <div id="mBack" class="glass"><span>Resultados: <b id="mBackN">0</b></span><button class="x2" id="mBackBtn">Ver lista</button></div>
+  <div id="mBack" class="glass"><span id="mBackTxt">Resultados: <b id="mBackN">0</b></span><button class="x2" id="mBackBtn">Ver lista</button></div>
 
   <nav id="mTabs" hidden aria-label="Secciones">
     <button data-t="lista" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Buscar</button>
@@ -649,7 +650,8 @@ const easeOut=t=>1-Math.pow(1-t,3);
 
 /* ---------- estado ---------- */
 const M={tab:'lista',autoWant:false};
-const state={cats:new Set(),price:0,tags:new Set(),barrio:'',q:'',list:'',near:false,only:null,onlyLabel:'',sel:null,route:[],geo:null,sound:true,sort:'auto',
+const NEARR=[500,1000,1500,3000,5000];
+const state={cats:new Set(),price:0,tags:new Set(),barrio:'',q:'',list:'',near:false,nearR:1500,nearBusy:false,only:null,onlyLabel:'',sel:null,route:[],geo:null,sound:true,sort:'auto',
   v3d:true,lm:true,lmSel:null,heat:false,trains:true,orbit:false,hoverBarrio:null,winner:null};
 let U={};
 const LS='morfi.v1';
@@ -946,8 +948,9 @@ function onClick(info){
 }
 function barrioBounds(n){const b=BARRIOS.find(x=>x.n===n); if(!b) return null; const xs=b.rings[0].map(p=>p[0]), ys=b.rings[0].map(p=>p[1]); return [[Math.min(...xs),Math.min(...ys)],[Math.max(...xs),Math.max(...ys)]]}
 function toggleBarrio(n){
-  state.barrio=(state.barrio===n?'':n); listLimit=120; syncFilterUI(); renderAll(); kick();
-  if(state.barrio){ const bb=barrioBounds(n); if(bb){ openDrawer(true); fitBounds(bb,{drawer:!isMobile(),maxZoom:15.5}) } }
+  state.barrio=(state.barrio===n?'':n); listLimit=120; mLimit=40; syncFilterUI(); renderAll(); kick();
+  if(isMobile()){ if(state.barrio){ $('#card').hidden=true; state.sel=null; mTab('lista'); const l=$('#mList'); if(l) l.scrollTop=0; toast(`${cur.length} lugares en ${n}`) } return }
+  if(state.barrio){ const bb=barrioBounds(n); if(bb){ openDrawer(true); fitBounds(bb,{drawer:true,maxZoom:15.5}) } }
 }
 
 /* ---------- filtros ---------- */
@@ -963,7 +966,7 @@ function passes(p,ignoreCat){
   if(state.list==='want'&&!u.want) return false;
   if(state.list==='been'&&!u.been) return false;
   if(state.list==='todo'&&u.been) return false;
-  if(state.near&&state.geo&&pdist(p)>1500) return false;
+  if(state.near&&state.geo&&pdist(p)>state.nearR) return false;
   if(state.q){const q=nrm(state.q);const hay=nrm([p.n,p.sub,p.barrio,p.pick,p.addr,CATS[p.cat].l,p.src].join(' '));if(!hay.includes(q)) return false}
   return true;
 }
@@ -1100,7 +1103,7 @@ function select(id,fly){
 function closeCard(){state.sel=null;state.lmSel=null;$('#card').hidden=true;history.replaceState(null,'',location.pathname+location.search);renderList();kick()}
 
 /* ---------- panel y filtros ---------- */
-function openDrawer(open){$('#drawer').hidden=!open;$('#btnList').classList.toggle('on',open);$('#btnList').setAttribute('aria-pressed',open);if(open&&isMobile())$('#card').hidden=true}
+function openDrawer(open){ if(isMobile()) open=false; $('#drawer').hidden=!open;$('#btnList').classList.toggle('on',open);$('#btnList').setAttribute('aria-pressed',open);if(open&&isMobile())$('#card').hidden=true}
 $('#btnList').onclick=()=>openDrawer($('#drawer').hidden);
 $('#drawerClose').onclick=()=>openDrawer(false);
 $('#segPrice').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.price=+b.dataset.p;syncFilterUI();renderAll()};
@@ -1133,17 +1136,34 @@ $('#views').addEventListener('click',e=>{const b=e.target.closest('.vb');if(!b)r
 function syncViews(){[['3d','v3d'],['lm','lm'],['heat','heat'],['trains','trains'],['orbit','orbit']].forEach(([v,k])=>{const b=$(`[data-v="${v}"]`);b.classList.toggle('on',!!state[k]);b.setAttribute('aria-pressed',!!state[k])})}
 
 /* ---------- geolocalización ---------- */
-$('#fabNear').onclick=()=>{
-  if(state.near){state.near=false;$('#fabNear').classList.remove('on');renderAll();return}
-  if(!navigator.geolocation){toast('Tu navegador no comparte ubicación');return}
-  toast('Buscando dónde estás…');
+function askNear(){
+  if(state.near){ state.near=false; $('#fabNear').classList.remove('on'); renderAll(); kick(); return }
+  if(state.geo){ state.near=true; $('#fabNear').classList.add('on'); afterNear(); return }
+  if(!navigator.geolocation){ toast('Tu teléfono no está compartiendo la ubicación'); return }
+  state.nearBusy=true; renderMobile(); toast('Buscando dónde estás…');
   navigator.geolocation.getCurrentPosition(pos=>{
+    state.nearBusy=false;
     state.geo={lat:pos.coords.latitude,lng:pos.coords.longitude};
-    state.near=true;$('#fabNear').classList.add('on'); if(isMobile()&&state.sort==='auto') state.sort='cerca'; renderAll(); if(!isMobile()) openDrawer(true);
-    flyTo({longitude:state.geo.lng,latitude:state.geo.lat,zoom:14.4,pitch:state.v3d?50:0},{d:1800});
-    const n=cur.length; toast(n?`${n} lugares a menos de 20 minutos a pie`:'Nada a 1,5 km. Sacá el filtro "Cerca" para ver más.');
-  },()=>toast('No pude obtener tu ubicación. Revisá los permisos.'),{enableHighAccuracy:true,timeout:10000,maximumAge:60000});
-};
+    const dentro=BARRIOS.some(b=>b.rings.some(r=>pip(state.geo.lng,state.geo.lat,r)));
+    state.near=true; $('#fabNear').classList.add('on');
+    if(!dentro) toast('Estás fuera de la Capital: te muestro lo más cercano igual');
+    afterNear(!dentro);
+  },err=>{
+    state.nearBusy=false; renderMobile();
+    toast(err.code===1?'No diste permiso de ubicación. Activalo en los ajustes del navegador.':err.code===3?'Tardó demasiado en ubicarte. Probá de nuevo.':'No pude obtener tu ubicación.');
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:120000});
+}
+function afterNear(lejos){
+  if(state.sort==='auto'||state.sort==='puntaje') state.sort='cerca';
+  // si hay poco alrededor, ampliar el radio solo hasta encontrar algo
+  const cuenta=r=>{const g=state.nearR;state.nearR=r;const n=PL.filter(p=>passes(p)).length;state.nearR=g;return n};
+  if(lejos) state.nearR=5000;
+  else { for(const r of NEARR){ if(cuenta(r)>=8){ state.nearR=r; break } state.nearR=r } }
+  renderAll(); kick();
+  if(deckgl&&(!isMobile()||M.tab==='mapa')) flyTo({longitude:state.geo.lng,latitude:state.geo.lat,zoom:14.4,pitch:state.v3d?50:0},{d:1800});
+  const n=cur.length; toast(n?`${n} lugares a ${fmtD(state.nearR)} de donde estás`:'No hay lugares cargados cerca tuyo');
+}
+$('#fabNear').onclick=askNear;
 
 /* ---------- rutas ---------- */
 const ROUTES=[
@@ -1308,7 +1328,7 @@ function mTab(t){
   $$('#mTabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
   if(t==='guardados'){ if(!state.list) setList('want'); }
   else if(M.prevList!==undefined&&t==='lista'&&state.list==='want'&&M.autoWant){ setList(''); }
-  if(t==='mapa'){ ensureDeck(); closeSheets(); setTimeout(()=>{kick(); if(!state.sel) fitPlaces(cur.slice(0,60))},60) }
+  if(t==='mapa'){ ensureDeck(); closeSheets(); $('#mFiltSheet').hidden=true; setTimeout(()=>{kick(); if(!state.sel) fitPlaces(cur.slice(0,60))},60) }
   else { $('#card').hidden=true; state.sel=null }
   renderMobile(); kick();
 }
@@ -1321,7 +1341,10 @@ function mQuickOn(k){
   return state.tags.has(k);
 }
 function mToggleQuick(k){
-  if(k==='cerca'){ $('#fabNear').click(); return }
+  if(k==='__limpiar'){ mClearAll(); return }
+  if(k==='__barrio'){ state.barrio=''; syncFilterUI(); mLimit=40; renderAll(); kick(); return }
+  if(k==='__radio'){ const i=NEARR.indexOf(state.nearR); state.nearR=NEARR[(i+1)%NEARR.length]; mLimit=40; renderAll(); toast('Mostrando lugares a '+fmtD(state.nearR)); return }
+  if(k==='cerca'){ askNear(); return }
   if(k==='barato'){ state.price=(state.price===2?0:2) }
   else { state.tags.has(k)?state.tags.delete(k):state.tags.add(k) }
   syncFilterUI(); renderAll();
@@ -1341,10 +1364,18 @@ function renderMobile(){
   const counts={}; PL.filter(p=>passes(p,true)).forEach(p=>counts[p.cat]=(counts[p.cat]||0)+1);
   $('#mCats').innerHTML=`<button class="mcat ${state.cats.size?'':'on'}" data-c="" style="--c:#f3f5f9"><span class="rnd" style="--c:#f3f5f9"><b>★</b></span>Todo</button>`+
     Object.entries(CATS).filter(([k])=>counts[k]).map(([k,v])=>`<button class="mcat ${state.cats.has(k)?'on':''}" data-c="${k}" style="--c:${v.c}">${rndCat(k)}${v.s}</button>`).join('');
-  $('#mQuick').innerHTML=MOBQ.filter(q=>q.k!=='g45'||PL.some(p=>p.gr!=null)).map(q=>`<button class="mq ${mQuickOn(q.k)?'on':''} ${q.cls||''}" data-q="${q.k}">${q.t}</button>`).join('');
+  const activos=state.cats.size||state.tags.size||state.price||state.barrio||state.list||state.q||state.only||state.near;
+  let qh='';
+  if(activos) qh+=`<button class="mq clear" data-q="__limpiar">✕ Limpiar filtros</button>`;
+  if(state.barrio) qh+=`<button class="mq on" data-q="__barrio">${esc(state.barrio)} ✕</button>`;
+  if(state.near&&state.geo) qh+=`<button class="mq on" data-q="__radio">A ${fmtD(state.nearR)} ✕</button>`;
+  qh+=MOBQ.filter(q=>q.k!=='g45'||PL.some(p=>p.gr!=null)).filter(q=>!(q.k==='cerca'&&state.near&&state.geo)).map(q=>`<button class="mq ${mQuickOn(q.k)?'on':''} ${q.cls||''}" data-q="${q.k}">${q.k==='cerca'&&state.nearBusy?'Ubicando…':q.t}</button>`).join('');
+  $('#mQuick').innerHTML=qh;
   const sortLabel=(SORTS.find(s=>s[0]===state.sort)||SORTS[0])[1];
   $('#mCount').innerHTML=`<b>${cur.length}</b> lugares · ${esc(sortLabel)}`;
-  $('#mBackN').textContent=cur.length;
+  const filtroTxt=state.barrio||(state.cats.size===1?CATS[[...state.cats][0]].l:state.onlyLabel||'');
+  $('#mBackTxt').innerHTML=filtroTxt?`${esc(filtroTxt)}: <b id="mBackN">${cur.length}</b>`:`Resultados: <b id="mBackN">${cur.length}</b>`;
+  const fn=$('#mFiltN'); if(fn) fn.textContent=cur.length;
   const saved=PL.filter(p=>ud(p.id).want).length; const sb=$('#mSaved'); sb.hidden=!saved; sb.textContent=saved;
   const list=$('#mList');
   if(!cur.length){ list.innerHTML=`<div class="mempty"><b>Nada con esos filtros</b>Probá sacar alguno o buscá otra cosa.<br><button id="mClear2">Limpiar filtros</button></div>`; return }
@@ -1371,7 +1402,8 @@ function initMobile(){
   $$('[data-close-sheet]').forEach(b=>b.onclick=closeSheets);
   $$('.msheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeSheets()}));
 }
-function mClearAll(){ state.cats.clear(); state.tags.clear(); state.price=0; state.barrio=''; state.list=''; state.only=null; state.onlyLabel=''; state.q=''; const q=$('#mq'); if(q)q.value=''; $('#mqClear').hidden=true; syncFilterUI(); mLimit=40; renderAll(); closeSheets() }
+function mClearAll(){ state.cats.clear(); state.tags.clear(); state.price=0; state.barrio=''; state.list=''; state.only=null; state.onlyLabel=''; state.q=''; state.near=false; state.sort='auto'; M.autoWant=false;
+  const q=$('#mq'); if(q)q.value=''; $('#mqClear').hidden=true; $('#fabNear').classList.remove('on'); syncFilterUI(); mLimit=40; renderAll(); kick(); closeSheets(); toast('Filtros limpios') }
 
 /* ---------- arranque ---------- */
 function intro(){
@@ -1421,14 +1453,38 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 </script>
 
 <div id="install" class="glass" hidden><span>Instalá Mapa del Morfi</span><button id="installYes">Instalar</button><button class="no" id="installNo" aria-label="Ahora no">✕</button></div>
+<div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
-/* app instalable: service worker para usar sin internet y botón de instalar */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=82965da9a1').catch(()=>{})) }
+/* app instalable: service worker + botón de instalar con instrucciones según el navegador */
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=b8e5b07f37').catch(()=>{})) }
+const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
-addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};setTimeout(()=>ib.hidden=false,4500)});
-document.getElementById('installYes').onclick=async()=>{ib.hidden=true;if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}};
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
+function comoInstalar(){
+  const ua=navigator.userAgent, s=document.getElementById('howSheet'), b=document.getElementById('howBody');
+  let pasos;
+  if(instalada()) pasos='<p style="font-size:15px">Ya la tenés instalada: abrila desde el ícono de tu pantalla de inicio.</p>';
+  else if(/CriOS|iPhone|iPad|iPod/i.test(ua)&&/Safari/i.test(ua)&&!/Android/i.test(ua))
+    pasos='<p style="font-size:15px;line-height:1.7">1. Tocá el botón <b>Compartir</b> (el cuadrado con la flecha, abajo).<br>2. Elegí <b>Agregar a pantalla de inicio</b>.<br>3. Confirmá con <b>Agregar</b>.</p><p class="small">En iPhone la instalación solo funciona desde Safari.</p>';
+  else if(/Firefox|FxiOS/i.test(ua))
+    pasos='<p style="font-size:15px;line-height:1.7">1. Abrí el menú <b>⋮</b> de Firefox (arriba a la derecha).<br>2. Elegí <b>Instalar</b> o <b>Agregar a la pantalla de inicio</b>.</p>';
+  else if(/SamsungBrowser/i.test(ua))
+    pasos='<p style="font-size:15px;line-height:1.7">1. Abrí el menú <b>≡</b> del navegador Samsung.<br>2. Elegí <b>Agregar página a</b> → <b>Pantalla de inicio</b>.</p>';
+  else
+    pasos='<p style="font-size:15px;line-height:1.7">1. Abrí el menú <b>⋮</b> del navegador.<br>2. Elegí <b>Instalar app</b> o <b>Agregar a la pantalla de inicio</b>.</p><p class="small">Si no aparece, probá con Chrome.</p>';
+  b.innerHTML=pasos; s.hidden=false;
+  s.onclick=e=>{ if(e.target===s||e.target.closest('[data-close-sheet]')) s.hidden=true };
+}
+async function instalar(){ ib.hidden=true; if(deferredPrompt){ deferredPrompt.prompt(); const r=await deferredPrompt.userChoice.catch(()=>null); deferredPrompt=null; if(!r||r.outcome!=='accepted') comoInstalar(); } else comoInstalar() }
+document.getElementById('installYes').onclick=instalar;
 document.getElementById('installNo').onclick=()=>{ib.hidden=true;try{localStorage.setItem('morfi.noinstall','1')}catch(_){}};
-addEventListener('appinstalled',()=>ib.hidden=true);
+addEventListener('appinstalled',()=>{ib.hidden=true;try{localStorage.removeItem('morfi.noinstall')}catch(_){}});
+/* botón fijo en la pantalla de búsqueda, para instalar cuando el usuario quiera */
+addEventListener('load',()=>{ if(instalada()) return; const top=document.querySelector('.mtop .mbrand'); if(!top) return;
+  const b=document.createElement('button'); b.id='instChip'; b.textContent='Instalar app';
+  b.style.cssText='margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--neon);border-radius:3px;padding:6px 10px;box-shadow:0 0 14px rgba(255,45,85,.45)';
+  b.onclick=instalar; top.appendChild(b); });
+</script>
 </script>
 </body>
 </html>
