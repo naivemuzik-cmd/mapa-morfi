@@ -72,8 +72,9 @@ const LM=[
  {id:'obelisco',n:'Obelisco',y:1936,h:68,fp:12,major:1,d:'El símbolo de la ciudad: 67,5 metros en el cruce de la 9 de Julio y Corrientes. Se levantó en 1936 por el cuarto centenario de la primera fundación.',
   m:M=>{M.box(0,0,12,12,0,1.5,STONE2); M.frustum(0,0,3.5,3.5,1.75,1.75,1.5,62,WHITE,false); M.pyramid(0,0,3.5,3.5,63.5,4.5,WHITE);}},
  {id:'congreso',n:'Congreso de la Nación',y:1906,h:80,fp:130,major:1,d:'El Palacio del Congreso cierra la Avenida de Mayo frente a la Plaza del Congreso. Su cúpula de bronce verde llega a unos 80 metros.',
-  m:M=>{M.box(0,0,110,70,0,26,STONE); M.box(58,0,12,34,0,24,STONE2); for(let i=0;i<6;i++) M.cyl(66,-14+i*5.6,1.1,1.1,0,22,WHITE,8,false);
-    M.cyl(0,0,17,17,26,12,STONE,24); M.dome(0,0,17,38,GREEN,24,8,1.4); M.cyl(0,0,3,2.4,61,9,GREEN,12); M.dome(0,0,3,70,GOLD,10,3,1.6);}},
+  m:M=>{M.box(0,0,112,64,0,30,STONE); M.box(0,-38,64,14,0,26,STONE2); for(let i=0;i<10;i++) M.cyl(-27+i*6,-45,1.5,1.5,0,24,WHITE,10,false); M.pyramid(0,-38,66,14,26,7,STONE);
+    M.cyl(0,6,26,24,30,16,STONE,28); for(let i=0;i<16;i++){const a=i/16*Math.PI*2; M.cyl(Math.cos(a)*24,6+Math.sin(a)*24,1.4,1.4,30,14,WHITE,6,false);}
+    M.dome(0,6,24,46,GREEN,28,9,1.25); M.cyl(0,6,4.5,3.6,74,8,GREEN,14); M.dome(0,6,4.5,82,GOLD,12,4,1.5);}},
  {id:'casarosada',n:'Casa Rosada',y:1898,h:28,fp:110,major:1,d:'La sede del Poder Ejecutivo, frente a la Plaza de Mayo. Su rosa es una de las postales de Buenos Aires.',
   m:M=>{M.box(0,0,90,70,0,22,PINK); M.box(-47,0,8,22,0,27,PINK); M.box(-47,0,5,10,0,14,[.35,.2,.24]); M.frustum(0,0,45,35,40,30,22,4,[.8,.5,.55]);}},
  {id:'cabildo',n:'Cabildo',y:1751,h:32,fp:55,major:0,d:'El edificio colonial donde se gestó la Revolución de Mayo de 1810. Hoy es museo, frente a la Plaza de Mayo.',
