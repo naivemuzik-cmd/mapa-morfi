@@ -776,7 +776,7 @@ function initDeck(){
   }catch(e){ console.error(e); $('#stage').innerHTML='<div class="empty" style="padding-top:30vh"><b>Tu navegador no pudo iniciar WebGL</b>Probá con Chrome o Edge actualizados.</div>'; return false }
   return true;
 }
-window.morfi={deck:()=>deckgl,pick:(x,y,r=8)=>{const i=deckgl.pickObject({x,y,radius:r});return i&&{layer:i.layer.id,obj:i.object&&(i.object.n||i.object.id)}},capas:()=>deckgl.props.layers.map(l=>l.id+(l.props.pickable?'*':'')),get zoom(){return vs.zoom},get lod(){return LOD},get filtro(){return filtroActivo()},get cur(){return cur.length}};
+window.morfi={deck:()=>deckgl,get etiquetados(){return [...etiquetados]},pick:(x,y,r=8)=>{const i=deckgl.pickObject({x,y,radius:r});return i&&{layer:i.layer.id,obj:i.object&&(i.object.n||i.object.id)}},capas:()=>deckgl.props.layers.map(l=>l.id+(l.props.pickable?'*':'')),get zoom(){return vs.zoom},get lod(){return LOD},get filtro(){return filtroActivo()},get cur(){return cur.length}};
 let zq=null; function zoomChanged(){const q=Math.round(vs.zoom*4)/4; if(q!==zq){ const antes=zq; zq=q;
   if(antes!=null&&antes>=LOD.puntosDestacados&&q<LOD.puntosDestacados&&!filtroActivo()) toast('Vista general: elegí un barrio o acercate para ver los lugares');
   if(!raf) draw() }}
@@ -874,6 +874,8 @@ function layers(now){
     L.push(new D.PathLayer({id:'ruta',data:[{path}],getPath:d=>d.path,getColor:[255,212,0,235],getWidth:4,widthUnits:'pixels',capRounded:true,jointRounded:true,getDashArray:[3,2],dashJustified:true,extensions:D.PathStyleExtension?[new D.PathStyleExtension({dash:true})]:[],parameters:flat}));
     if(routeTrip) L.push(new D.TripsLayer({id:'caminante',data:[routeTrip],getPath:d=>d.path,getTimestamps:d=>d.ts,getColor:[255,244,210],getWidth:9,widthUnits:'pixels',capRounded:true,trailLength:routeTrip.len*0.14,currentTime:(t*routeTrip.speed)%routeTrip.len,fadeTrail:true,parameters:flat})) }
   // puntos (planos, sobre el suelo)
+  const LB=fontsReady?labels(now):{lm:[],b:[],p:[]};
+  etiquetados=new Set(LB.p.map(p=>p.id));   // la regla: se puede tocar lo que tiene el nombre a la vista
   const conFiltro=filtroActivo();
   const verPuntos=conFiltro||zNow>=LOD.puntosDestacados;
   const dots=(verPuntos?vis:[]).filter(p=>!(p.dist==='star1'||p.dist==='star2')).filter(p=>conFiltro||zNow>=LOD.puntosTodos||destacado(p));
@@ -909,7 +911,6 @@ function layers(now){
   [selP,winP].filter(Boolean).forEach((p,i)=>{ if(is3d) L.push(new D.ColumnLayer({id:'haz'+i,data:[p],getPosition:q=>[q.lng,q.lat],radius:vs.zoom>14?4:9,diskResolution:12,getElevation:1,elevationScale:(vs.zoom>14?260:900)*easeOut(Math.min(1,anim.sel)),getFillColor:[...CC[p.cat],150],extruded:true,material:false,parameters:solid})) });
   // ---- textos (todos maquetados juntos para que no se pisen) ----
   if(fontsReady){
-    const LB=labels(now);
     if(zNow<13.2) L.push(new D.TextLayer({id:'rio',data:RIVER_T,getPosition:d=>d.p,getText:d=>d.t,getSize:11,sizeUnits:'pixels',getColor:[0,229,255,90],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'auto',getAngle:-38,billboard:false,parameters:flat,fontSettings:{sdf:true,fontSize:40,buffer:6}}));
     if(stars.length) L.push(new D.TextLayer({id:'estrellas',data:stars,getPosition:p=>[p.lng,p.lat,pillar(p)],getText:p=>p.dist==='star2'?'★★':'★',getSize:20,sizeScale:pa*(1+0.08*Math.sin(t*2.2)),sizeUnits:'pixels',getColor:[255,212,0,255],outlineWidth:3,outlineColor:[40,24,0,255],fontSettings:{sdf:true,fontSize:64,buffer:8},fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'★',billboard:true,pickable:zNow>=LOD.tocarLugares,getTextAnchor:'middle',getAlignmentBaseline:'center',parameters:flat,updateTriggers:{getPosition:[anim.elev,zq,is3d]}}));
     const conCuenta=zNow<LOD.puntosDestacados&&!filtroActivo();
@@ -940,7 +941,7 @@ function layers(now){
         updateTriggers:{getPosition:[zq,rise],getColor:state.lmSel,getSize:state.lmSel,getText:0}}));
     }
     if(rpts.length) L.push(new D.TextLayer({id:'ruta-t',data:rpts.map((p,i)=>({p,i})),getPosition:d=>[d.p.lng,d.p.lat],getText:d=>String(d.i+1),getSize:13,getColor:[11,13,19,255],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'0123456789',getTextAnchor:'middle',getAlignmentBaseline:'center',parameters:flat}));
-    if(LB.p.length) L.push(new D.TextLayer({id:'lugar-t',data:LB.p,getPosition:p=>[p.lng,p.lat],getText:p=>p.n,getSize:12,sizeUnits:'pixels',getColor:p=>p.dist?[255,212,0,255]:[243,245,249,235],getPixelOffset:[0,-(radiusPx()+8)],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'auto',fontSettings:{sdf:true,fontSize:40,buffer:6},outlineWidth:3,outlineColor:[4,5,8,255],getTextAnchor:'middle',getAlignmentBaseline:'bottom',billboard:true,parameters:flat,updateTriggers:{getPixelOffset:zq}}));
+    if(LB.p.length) L.push(new D.TextLayer({id:'lugar-t',data:LB.p,pickable:true,getPosition:p=>[p.lng,p.lat],getText:p=>p.n,getSize:12,sizeUnits:'pixels',getColor:p=>p.dist?[255,212,0,255]:[243,245,249,235],getPixelOffset:[0,-(radiusPx()+8)],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'auto',fontSettings:{sdf:true,fontSize:40,buffer:6},outlineWidth:3,outlineColor:[4,5,8,255],getTextAnchor:'middle',getAlignmentBaseline:'bottom',billboard:true,parameters:flat,updateTriggers:{getPixelOffset:zq}}));
   }
   return L;
 }
@@ -1016,7 +1017,8 @@ document.addEventListener('visibilitychange',kick);
 
 /* ---------- interacción con el mapa ---------- */
 const tip=$('#tip');
-const isPlaceLayer=id=>id==='puntos'||id==='estrellas'||id==='faros'||id==='ruta-n';
+let etiquetados=new Set();
+const isPlaceLayer=id=>id==='puntos'||id==='estrellas'||id==='faros'||id==='ruta-n'||id==='lugar-t';
 function onHover(info){
   const o=info.object, id=info.layer&&info.layer.id;
   let html='';
@@ -1042,9 +1044,13 @@ function tocoElPunto(info,p){
 function onClick(info){
   const o=info.object, id=info.layer&&info.layer.id;
   if(o&&isPlaceLayer(id)){
-    if(id==='puntos'&&!tocoElPunto(info,o)){   // tocó al lado: es la zona, no el lugar
+    const porNombre=(id==='lugar-t');                       // tocó el nombre: siempre abre
+    const alLado=(id==='puntos'||id==='estrellas')&&!tocoElPunto(info,o);
+    const sinNombre=(id==='puntos'||id==='estrellas')&&!etiquetados.has(o.id);
+    if(!porNombre&&(alLado||sinNombre)){                     // si no se ve su nombre o tocaste al lado, es la zona
       const b=deckgl.pickObject({x:info.x,y:info.y,radius:10,layerIds:['barrios']});
       if(b&&b.object){ toggleBarrio(b.object.n); return }
+      if(sinNombre) return;
     }
     select(o.id,true); return }
   if(o&&id&&id.startsWith('lm-')&&id!=='lm-t'){ openLandmark(o.id); return }
@@ -1598,7 +1604,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=edb92b2b70').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=f2c8ba00dd').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
