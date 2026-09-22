@@ -774,6 +774,19 @@ function initDeck(){
       layers:[]
     });
   }catch(e){ console.error(e); $('#stage').innerHTML='<div class="empty" style="padding-top:30vh"><b>Tu navegador no pudo iniciar WebGL</b>Probá con Chrome o Edge actualizados.</div>'; return false }
+  try{
+    const cv=deckgl.canvas||$('#stage').querySelector('canvas');
+    if(cv){ let x0=0,y0=0,t0=0,dedos=0;
+      cv.addEventListener('touchstart',ev=>{ dedos=ev.touches.length; const t=ev.touches[0]; x0=t.clientX; y0=t.clientY; t0=Date.now() },{passive:true});
+      cv.addEventListener('touchend',ev=>{
+        if(dedos!==1||ev.touches.length) return;                    // con dos dedos estaba girando o haciendo zoom
+        const t=ev.changedTouches[0]; if(!t) return;
+        if(Math.hypot(t.clientX-x0,t.clientY-y0)>14||Date.now()-t0>600) return;   // se movió o lo mantuvo: no es un toque
+        const r=cv.getBoundingClientRect(); ultimoTap=Date.now();
+        tapDedo(t.clientX-r.left,t.clientY-r.top);
+      },{passive:true});
+    }
+  }catch(e){}
   return true;
 }
 window.morfi={deck:()=>deckgl,get etiquetados(){return [...etiquetados]},pick:(x,y,r=8)=>{const i=deckgl.pickObject({x,y,radius:r});return i&&{layer:i.layer.id,obj:i.object&&(i.object.n||i.object.id)}},capas:()=>deckgl.props.layers.map(l=>l.id+(l.props.pickable?'*':'')),get zoom(){return vs.zoom},get lod(){return LOD},get filtro(){return filtroActivo()},get cur(){return cur.length}};
@@ -1041,7 +1054,35 @@ function tocoElPunto(info,p){
     return Math.hypot(x-info.x,y-info.y)<=radiusPx()+4;
   }catch(e){ return true }
 }
+let modoDedo=false, ultimoTap=0;   // el último gesto fue con el dedo
+addEventListener('touchstart',()=>{modoDedo=true},{passive:true,capture:true});
+addEventListener('mousedown',()=>{modoDedo=false},{passive:true,capture:true});
+/* Con el dedo no alcanza con lo que devuelve la librería: acepta objetos cercanos y el toque es ancho.
+   Acá se resuelve a mano: primero el nombre, después la estrella, después el punto (solo si el dedo cayó
+   encima y su nombre está a la vista), después un monumento y, si no, la zona. */
+function tapDedo(x,y){
+  if(!deckgl) return;
+  const buscar=(capas,r)=>{ try{ return deckgl.pickObject({x,y,radius:r,layerIds:capas}) }catch(e){ return null } };
+  const t=buscar(['lugar-t'],6);
+  if(t&&t.object){ select(t.object.id,true); return }
+  const e=buscar(['estrellas'],8);
+  if(e&&e.object&&etiquetados.has(e.object.id)){ select(e.object.id,true); return }
+  const p=buscar(['puntos'],2);
+  if(p&&p.object&&etiquetados.has(p.object.id)){
+    const vp=p.viewport||(deckgl.getViewports&&deckgl.getViewports()[0]);
+    let cerca=true;
+    if(vp){ const [px,py]=vp.project([p.object.lng,p.object.lat]); cerca=Math.hypot(px-x,py-y)<=radiusPx()+3 }
+    if(cerca){ select(p.object.id,true); return }
+  }
+  const m=buscar(LMS.map(l=>'lm-'+l.id),4);
+  if(m&&m.object){ openLandmark(m.object.id); return }
+  const b=buscar(['barrios'],12);
+  if(b&&b.object){ toggleBarrio(b.object.n); return }
+  if(state.sel) closeCard();
+}
 function onClick(info){
+  // con el dedo manda tapDedo; los celulares además emiten un clic de mouse falso ~300 ms después: se ignora
+  if(modoDedo||Date.now()-ultimoTap<1000) return;
   const o=info.object, id=info.layer&&info.layer.id;
   if(o&&isPlaceLayer(id)){
     const porNombre=(id==='lugar-t');                       // tocó el nombre: siempre abre
@@ -1604,7 +1645,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=3372eb03fe').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=fe376c5008').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
