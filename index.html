@@ -1000,9 +1000,8 @@ function toggleBarrio(n){
   listLimit=120; mLimit=40; syncFilterUI(); renderAll(); kick();
   if(!state.barrio) return;
   const bb=barrioBounds(n);
-  if(isMobile()){
-    if(cerca){ toast(`${cur.length} lugares en ${n} · tocá uno para ver la ficha`); return }   // ya estás adentro: solo filtra
-    $('#card').hidden=true; state.sel=null; mTab('lista'); const l=$('#mList'); if(l) l.scrollTop=0;   // de lejos: la lista del barrio
+  if(isMobile()){   // tocar el barrio siempre abre su lista completa
+    $('#card').hidden=true; state.sel=null; mTab('lista'); const l=$('#mList'); if(l) l.scrollTop=0;
     toast(`${cur.length} lugares en ${n}`); return;
   }
   if(bb){ openDrawer(true); fitBounds(bb,{drawer:true,maxZoom:15.5}) }
@@ -1514,7 +1513,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=c22f4de6df').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=968d3818e8').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
