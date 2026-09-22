@@ -769,7 +769,7 @@ function initDeck(){
       getCursor:({isHovering,isDragging})=>isDragging?'grabbing':isHovering?'pointer':'grab',
       onHover, onClick,
       useDevicePixels:Math.min(window.devicePixelRatio||1,2),
-      pickingRadius:6,
+      pickingRadius:2,
       onError:e=>console.warn('deck',e),
       layers:[]
     });
@@ -1028,9 +1028,24 @@ function onHover(info){
   if(!(o&&id==='barrios')&&state.hoverBarrio){state.hoverBarrio=null;kick()}
   if(html&&!isMobile()){ tip.innerHTML=html; tip.style.left=info.x+'px'; tip.style.top=info.y+'px'; tip.classList.add('on') } else tip.classList.remove('on');
 }
+// ¿el dedo cayó realmente encima del punto? (deck.gl acepta objetos cercanos y eso hacía abrir lugares al tocar la zona)
+function tocoElPunto(info,p){
+  try{
+    let vp=info.viewport||(deckgl.getViewports&&deckgl.getViewports()[0]);
+    if(!vp){ const {width,height}=viewportSize();
+      vp=new D.WebMercatorViewport({width,height,longitude:vs.longitude,latitude:vs.latitude,zoom:vs.zoom,pitch:vs.pitch,bearing:vs.bearing}) }
+    const [x,y]=vp.project([p.lng,p.lat]);
+    return Math.hypot(x-info.x,y-info.y)<=radiusPx()+4;
+  }catch(e){ return true }
+}
 function onClick(info){
   const o=info.object, id=info.layer&&info.layer.id;
-  if(o&&isPlaceLayer(id)){ select(o.id,true); return }
+  if(o&&isPlaceLayer(id)){
+    if(id==='puntos'&&!tocoElPunto(info,o)){   // tocó al lado: es la zona, no el lugar
+      const b=deckgl.pickObject({x:info.x,y:info.y,radius:10,layerIds:['barrios']});
+      if(b&&b.object){ toggleBarrio(b.object.n); return }
+    }
+    select(o.id,true); return }
   if(o&&id&&id.startsWith('lm-')&&id!=='lm-t'){ openLandmark(o.id); return }
   if(o&&id==='barrios'){ toggleBarrio(o.n); return }
   // el toque cayó en algo que no abre nada (una estación, la base de un monumento, una calle):
@@ -1582,7 +1597,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=a1a6e46d20').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=b00a173424').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
