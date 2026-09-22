@@ -1,5 +1,5 @@
-/* Mapa del Morfi: guarda la app y los datos para usarla sin internet. Versión b00a173424 */
-const V='morfi-b00a173424', CORE=["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon.png", "geo.js", "calles.js", "landmarks.js", "places.js"];
+/* Mapa del Morfi: guarda la app y los datos para usarla sin internet. Versión edb92b2b70 */
+const V='morfi-edb92b2b70', CORE=["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon.png", "geo.js", "calles.js", "landmarks.js", "places.js"];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{

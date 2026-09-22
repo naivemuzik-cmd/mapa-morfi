@@ -792,7 +792,8 @@ const LOD={
   carteHitos:12.6, carteHitosTodos:13.8, // sus carteles
   carteBarrios:15.4,  // los nombres de barrio se apagan al acercarse mucho
   carteLugares:14.6,
-  tocarLugares:14.0   // más lejos que esto, tocar el mapa elige el barrio, no un lugar suelto
+  // un lugar suelto solo se puede tocar cuando ya se leen los nombres: más lejos, el toque siempre es de la zona
+  get tocarLugares(){ return this.carteLugares }
 };
 // si elegiste una zona o un filtro, los lugares se ven aunque estés lejos
 const filtroActivo=()=>!!(state.barrio||state.cats.size||state.tags.size||state.price||state.barato||state.q||state.only||state.near||state.list);
@@ -1597,7 +1598,7 @@ window.addEventListener('resize',()=>{computeHome();kick()});
 <div class="msheet" id="howSheet" hidden><div class="box"><h3>Instalar la app</h3><div class="fb" id="howBody"></div><div class="go"><button class="ok" data-close-sheet>Entendido</button></div></div></div>
 <script>
 /* app instalable: service worker + botón de instalar con instrucciones según el navegador */
-if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=b00a173424').catch(()=>{})) }
+if('serviceWorker' in navigator){ addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=edb92b2b70').catch(()=>{})) }
 const instalada=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let deferredPrompt=null; const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;try{if(localStorage.getItem('morfi.noinstall'))return}catch(_){};if(!instalada())setTimeout(()=>ib.hidden=false,4500)});
