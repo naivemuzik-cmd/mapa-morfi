@@ -69,7 +69,7 @@ const STONE=[.88,.89,.92], STONE2=[.78,.8,.85], WHITE=[.96,.97,.99], GREEN=[.36,
   RED=[.95,.2,.28], BRICK=[.78,.43,.33], TERRA=[.86,.55,.36], SLATE=[.42,.52,.63], CYAN=[.35,.88,1], STEEL=[.74,.79,.87], BLUE=[.12,.3,.82], YEL=[1,.84,.12], GLASS=[.55,.8,.95];
 
 const LM=[
- {id:'obelisco',n:'Obelisco',y:1936,h:68,fp:12,major:1,d:'El símbolo de la ciudad: 67,5 metros en el cruce de la 9 de Julio y Corrientes. Se levantó en 1936 por el cuarto centenario de la primera fundación.',
+ {id:'obelisco',n:'Obelisco',y:1936,h:67.5,fp:12,major:1,d:'El símbolo de la ciudad: 67,5 metros en el cruce de la 9 de Julio y Corrientes. Se levantó en 1936 por el cuarto centenario de la primera fundación.',
   m:M=>{M.box(0,0,12,12,0,1.5,STONE2); M.frustum(0,0,3.5,3.5,1.75,1.75,1.5,62,WHITE,false); M.pyramid(0,0,3.5,3.5,63.5,4.5,WHITE);}},
  {id:'congreso',n:'Congreso de la Nación',y:1906,h:80,fp:130,major:1,d:'El Palacio del Congreso cierra la Avenida de Mayo frente a la Plaza del Congreso. Su cúpula de bronce verde llega a unos 80 metros.',
   m:M=>{M.box(0,0,112,64,0,30,STONE); M.box(0,-38,64,14,0,26,STONE2); for(let i=0;i<10;i++) M.cyl(-27+i*6,-45,1.5,1.5,0,24,WHITE,10,false); M.pyramid(0,-38,66,14,26,7,STONE);

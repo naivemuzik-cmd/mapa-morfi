@@ -1,4 +1,5 @@
 {
+ "id": "./",
  "name": "Mapa del Morfi",
  "short_name": "Morfi",
  "description": "Dónde comer y tomar en Buenos Aires, en un mapa 3D de noche.",
@@ -35,7 +36,30 @@
  "shortcuts": [
   {
    "name": "¿Qué morfo hoy?",
+   "short_name": "Ruleta",
    "url": "./#ruleta",
+   "icons": [
+    {
+     "src": "icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Mis lugares",
+   "short_name": "Míos",
+   "url": "./#mios",
+   "icons": [
+    {
+     "src": "icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Cerca mío",
+   "short_name": "Cerca",
+   "url": "./#cerca",
    "icons": [
     {
      "src": "icon-192.png",
