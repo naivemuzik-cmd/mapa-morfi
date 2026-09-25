@@ -1,5 +1,5 @@
-/* Mapa del Morfi: guarda la app y los datos para usarla sin internet. Versión f915003 */
-const V='morfi-f915003', EXT='morfi-ext-1', CORE=["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon.png", "geo.js?v=f915003", "calles.js?v=f915003", "landmarks.js?v=f915003", "places.js?v=f915003"],
+/* Mapa del Morfi: guarda la app y los datos para usarla sin internet. Versión dde3fb2 */
+const V='morfi-dde3fb2', EXT='morfi-ext-1', CORE=["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon.png", "geo.js?v=dde3fb2", "calles.js?v=dde3fb2", "landmarks.js?v=dde3fb2", "places.js?v=dde3fb2"],
   EXTU=['https://cdn.jsdelivr.net/npm/deck.gl@9.1.14/dist.min.js'],   // el motor 3D: sin él no hay mapa
   EXTH=/(^|\.)(cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com)$/;
 const sirve=res=>res&&(res.ok||res.type==='opaque');   // nunca guardar un 404 o un 503

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, interactive-widget=resizes-content">
 <meta name="theme-color" content="#06070b">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 653 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
+<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 751 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script>window.MORFI_VER='f915003'</script>
+<script>window.MORFI_VER='dde3fb2'</script>
 <style>
   /* márgenes seguros de celulares con muesca / barra inferior */
   .topbar{top:calc(12px + env(safe-area-inset-top,0px))!important}
@@ -835,10 +835,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/deck.gl@9.1.14/dist.min.js"></script>
-<script src="geo.js?v=f915003"></script>
-<script src="calles.js?v=f915003"></script>
-<script src="landmarks.js?v=f915003"></script>
-<script src="places.js?v=f915003"></script>
+<script src="geo.js?v=dde3fb2"></script>
+<script src="calles.js?v=dde3fb2"></script>
+<script src="landmarks.js?v=dde3fb2"></script>
+<script src="places.js?v=dde3fb2"></script>
 <script>
 (function(){
 'use strict';
@@ -849,6 +849,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const CATS={
   estrella:{l:'Estrellas Michelin',s:'Estrellas',c:'#ffd400',k:'M'},
   autor:{l:'Cocina de autor',s:'De autor',c:'#ff2e88',k:'A'},
+  japo:{l:'Sushi & japonesa',s:'Sushi',c:'#ff9f80',k:'J'},
   parrilla:{l:'Parrillas',s:'Parrillas',c:'#ff6a1f',k:'P'},
   bodegon:{l:'Bodegones & cantinas',s:'Bodegones',c:'#ff3344',k:'B'},
   pizza:{l:'Pizzerías',s:'Pizza',c:'#ffb000',k:'Z'},
@@ -902,7 +903,9 @@ const SIN={};   // palabra escrita → comienzos de palabra que valen por ella
  ['vermu vermus vermut vermouth vermuteria','vermu vermouth'],
  ['veggie vegano vegana veganos veganas vegetariano vegetariana vegetarianos vegetarianas','veggie vegan vegetarian'],
  ['birra birras cerveza cervezas cerveceria cervecerias','cerve birra'],
- ['sushi','sushi omakase nikkei japon'],
+ ['sushi sushis japonesa japones japonesas japoneses','sushi omakase nikkei japon izakaya ramen nigiri sashimi handroll'],
+ ['omakase omakases','omakase'],
+ ['izakaya izakayas','izakaya'],
  ['mila milas milanesa milanesas','milanes'],
  ['asado asados','asado parrill'],
  ['parrilla parrillas','parrill'],
@@ -2861,7 +2864,7 @@ if('serviceWorker' in navigator){
   });
   document.getElementById('swNewYes').onclick=()=>{ recargando=true; location.reload() };
   document.getElementById('swNewNo').onclick=()=>{ document.getElementById('swNew').hidden=true };
-  addEventListener('load',()=>sw.register('sw.js?v=f915003',{updateViaCache:'none'}).then(reg=>{
+  addEventListener('load',()=>sw.register('sw.js?v=dde3fb2',{updateViaCache:'none'}).then(reg=>{
     document.addEventListener('visibilitychange',()=>{ if(!document.hidden) reg.update().catch(()=>{}) });
   }).catch(()=>{}));
 }
