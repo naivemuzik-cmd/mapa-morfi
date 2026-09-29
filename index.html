@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, interactive-widget=resizes-content">
 <meta name="theme-color" content="#06070b">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 901 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
+<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 1752 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script>window.MORFI_VER='2547dd6'</script>
+<script>window.MORFI_VER='05bee30'</script>
 <style>
   /* márgenes seguros de celulares con muesca / barra inferior */
   .topbar{top:calc(12px + env(safe-area-inset-top,0px))!important}
@@ -835,10 +835,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/deck.gl@9.1.14/dist.min.js"></script>
-<script src="geo.js?v=2547dd6"></script>
-<script src="calles.js?v=2547dd6"></script>
-<script src="landmarks.js?v=2547dd6"></script>
-<script src="places.js?v=2547dd6"></script>
+<script src="geo.js?v=05bee30"></script>
+<script src="calles.js?v=05bee30"></script>
+<script src="landmarks.js?v=05bee30"></script>
+<script src="places.js?v=05bee30"></script>
 <script>
 (function(){
 'use strict';
@@ -2864,7 +2864,7 @@ if('serviceWorker' in navigator){
   });
   document.getElementById('swNewYes').onclick=()=>{ recargando=true; location.reload() };
   document.getElementById('swNewNo').onclick=()=>{ document.getElementById('swNew').hidden=true };
-  addEventListener('load',()=>sw.register('sw.js?v=2547dd6',{updateViaCache:'none'}).then(reg=>{
+  addEventListener('load',()=>sw.register('sw.js?v=05bee30',{updateViaCache:'none'}).then(reg=>{
     document.addEventListener('visibilitychange',()=>{ if(!document.hidden) reg.update().catch(()=>{}) });
   }).catch(()=>{}));
 }
