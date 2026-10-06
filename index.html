@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script>window.MORFI_VER='f70d1ff'</script>
+<script>window.MORFI_VER='fd1679f'</script>
 <style>
   /* márgenes seguros de celulares con muesca / barra inferior */
   .topbar{top:calc(12px + env(safe-area-inset-top,0px))!important}
@@ -835,10 +835,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/deck.gl@9.1.14/dist.min.js"></script>
-<script src="geo.js?v=f70d1ff"></script>
-<script src="calles.js?v=f70d1ff"></script>
-<script src="landmarks.js?v=f70d1ff"></script>
-<script src="places.js?v=f70d1ff"></script>
+<script src="geo.js?v=fd1679f"></script>
+<script src="calles.js?v=fd1679f"></script>
+<script src="landmarks.js?v=fd1679f"></script>
+<script src="places.js?v=fd1679f"></script>
 <script>
 (function(){
 'use strict';
@@ -850,7 +850,8 @@ const CATS={
   estrella:{l:'Estrellas Michelin',s:'Estrellas',c:'#ffd400',k:'M'},
   autor:{l:'Cocina de autor',s:'De autor',c:'#ff2e88',k:'A'},
   japo:{l:'Sushi & japonesa',s:'Sushi',c:'#ff9f80',k:'J'},
-  verde:{l:'Veggie & sin TACC',s:'Veggie/TACC',c:'#7bd88f',k:'V'},
+  verde:{l:'Veggie: vegano y vegetariano',s:'Veggie',c:'#7bd88f',k:'V'},
+  tacc:{l:'Sin TACC: apto celíacos',s:'Sin TACC',c:'#e0b95b',k:'L'},
   parrilla:{l:'Parrillas',s:'Parrillas',c:'#ff6a1f',k:'P'},
   bodegon:{l:'Bodegones & cantinas',s:'Bodegones',c:'#ff3344',k:'B'},
   pizza:{l:'Pizzerías',s:'Pizza',c:'#ffb000',k:'Z'},
@@ -2866,7 +2867,7 @@ if('serviceWorker' in navigator){
   });
   document.getElementById('swNewYes').onclick=()=>{ recargando=true; location.reload() };
   document.getElementById('swNewNo').onclick=()=>{ document.getElementById('swNew').hidden=true };
-  addEventListener('load',()=>sw.register('sw.js?v=f70d1ff',{updateViaCache:'none'}).then(reg=>{
+  addEventListener('load',()=>sw.register('sw.js?v=fd1679f',{updateViaCache:'none'}).then(reg=>{
     document.addEventListener('visibilitychange',()=>{ if(!document.hidden) reg.update().catch(()=>{}) });
   }).catch(()=>{}));
 }
