@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, interactive-widget=resizes-content">
 <meta name="theme-color" content="#06070b">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 1875 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
+<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 2854 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script>window.MORFI_VER='fd1679f'</script>
+<script>window.MORFI_VER='f4057c2'</script>
 <style>
   /* márgenes seguros de celulares con muesca / barra inferior */
   .topbar{top:calc(12px + env(safe-area-inset-top,0px))!important}
@@ -267,6 +267,36 @@
   .gg-g{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#fbbc04;white-space:nowrap}
   .gg.pocas .gg-n,.gg.pocas .gg-st{opacity:.45}   /* menos de 30 reseñas: el número pesa poco */
   .li .r .g{display:block;color:#fbbc04;font-size:11px;margin-top:1px}
+  .ab{font-style:normal;color:var(--dim)}
+  .ab.on{color:var(--ok)}
+  .ab.pronto{color:var(--warn)}
+  .li .t>span .ab{font-style:normal;font-weight:700}
+  .chero .meta .abm{color:var(--muted);font-weight:700}
+  .chero .meta .abm.on{color:var(--ok)}
+  .chero .meta .abm.pronto{color:var(--warn)}
+  .semana summary{cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--neon2);padding:2px 0 8px}
+  .semana .kv .hoy{color:var(--text);font-weight:700}
+  .semana small{display:block;margin-top:8px}
+  .nlbar{display:flex;flex-wrap:wrap;align-items:center;gap:5px;padding:9px 12px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(0,229,255,.08),transparent)}
+  .nlbar span{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--neon2);margin-right:3px}
+  .nlbar b{font-size:12px;font-weight:700;padding:3px 8px;border-radius:99px;border:1px solid rgba(0,229,255,.4);color:var(--text)}
+  .nlbar i{flex-basis:100%;font-style:normal;font-size:11.5px;color:var(--muted)}
+  .rkg{display:flex;flex-direction:column;gap:8px;padding:4px 18px}
+  .rkg button{height:52px;border-radius:4px;font-weight:700;font-size:15px;border:1px solid var(--line2);background:rgba(255,255,255,.04)}
+  .rkg .rkg-top{border-color:var(--ok);color:var(--ok)}.rkg .rkg-bien{border-color:var(--sign);color:var(--sign)}.rkg .rkg-no{border-color:var(--neon);color:#ff7a93}
+  .rkvs{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch;padding:4px 18px}
+  .rkvs i{align-self:center;font-family:var(--mono);font-size:12px;color:var(--dim);font-style:normal}
+  .rkvs button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:6px;border:1px solid var(--line2);border-top:3px solid var(--c);background:rgba(255,255,255,.04);text-align:center;min-width:0}
+  .rkvs button:active{transform:scale(.97);background:rgba(255,255,255,.09)}
+  .rkvs b{font-size:14px;line-height:1.2;overflow-wrap:anywhere}
+  .rkvs small{font-size:11px;color:var(--muted)}
+  .rank{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted);padding:8px 10px;border:1px solid var(--line);border-left:3px solid var(--sign);border-radius:2px}
+  .rank b{font-family:var(--mono);font-size:22px;line-height:1}
+  .rank .ghost{margin-left:auto;height:34px;flex:none;color:var(--text)}
+  .rk-top{color:var(--ok)}.rk-bien{color:var(--sign)}.rk-no{color:#ff7a93}
+  .rank-w:empty{display:none}
+  ::view-transition-group(rnd-sel){animation-duration:.38s;animation-timing-function:cubic-bezier(.2,.9,.25,1.05)}
+  .gnr{display:block;font-family:var(--mono);font-size:10px;color:var(--dim);font-weight:400;letter-spacing:.02em}   /* cuántas reseñas respaldan el puntaje */
   .pick{font-size:14.5px;line-height:1.55;padding:12px 14px;border-radius:3px;background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 2px,transparent 2px 4px),rgba(255,212,0,.05);border:1px dashed rgba(255,212,0,.35)}
   .pick em{font-style:normal;color:var(--sign);font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:block;margin-bottom:5px}
   .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;color:var(--muted)}
@@ -477,7 +507,7 @@
   .msheet .go button{flex:1;height:46px;border-radius:3px;font-weight:700}
   .msheet .go .clear{border:1px solid var(--line);color:var(--muted)}
   .msheet .go .ok{background:var(--neon);color:#fff}
-  #mOrigenSheet,#mRutaSheet{z-index:85}   /* arriba de los modales: la Ruleta pide el punto de partida desde adentro */
+  #mOrigenSheet,#mRutaSheet,#mRankSheet{z-index:85}   /* arriba de los modales: la Ruleta pide el punto de partida desde adentro */
   .msheet .ow{margin:0 18px 10px}
   .msheet .oq{padding:0 18px 8px}
   .msheet .oq input{width:100%;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:3px;background:rgba(0,0,0,.35);color:var(--text);font-size:16px}
@@ -566,6 +596,7 @@
     .mrow .t span{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
     .mrow .rc{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right;font-family:var(--mono);font-size:11px;color:var(--dim);white-space:nowrap}
     .mrow .rc .g{color:#fbbc04;font-size:13px;font-weight:700}
+    .mrow .rc .gnr{margin-top:-2px}
     .mrow .rc .pr{color:var(--sign)}
     .mrow .mk{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);opacity:.75}
     .mrow .tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
@@ -573,6 +604,11 @@
     .mrow .tags i.gold{background:var(--sign);color:#141000}
     .mrow .tags i.been{color:var(--ok)}
     .mrow .tags i.want{color:var(--sign)}
+    .mrow .tags i.rk{font-weight:700}
+    .mrow .tags i.ab{background:rgba(255,255,255,.04)}
+    .mrow .tags i.ab.on{color:var(--ok);background:rgba(61,255,158,.08)}
+    .mrow .tags i.ab.pronto{color:var(--warn);background:rgba(255,176,0,.08)}
+    .mq.on.abq{border-color:var(--ok);color:var(--ok);background:rgba(61,255,158,.1)}
     .mempty{padding:40px 24px;text-align:center;color:var(--muted);font-size:14px}
     .mempty b{display:block;font-family:var(--display);font-size:19px;color:var(--text);margin-bottom:8px}
     .mempty button{margin-top:14px;border:1px solid var(--neon2);color:var(--neon2);border-radius:3px;padding:10px 16px;font-weight:700}
@@ -693,7 +729,7 @@
     </div>
     <label class="search glass" id="searchBox">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Buscar lugar, plato, barrio…" autocomplete="off" aria-label="Buscar">
+      <input id="q" type="search" placeholder="Probá: sushi barato en Palermo abierto ahora" autocomplete="off" aria-label="Buscar">
       <button id="qClear" type="button" hidden aria-label="Borrar búsqueda">×</button>
     </label>
     <div class="tb-actions">
@@ -766,7 +802,7 @@
     <div class="mtop">
       <div class="mbrand"><b>Mapa del Morfi</b><span id="mBrandSub"></span></div>
       <label class="msearch"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="opacity:.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="mq" type="search" enterkeyhint="search" placeholder="Buscar lugar, plato, barrio…" autocomplete="off" aria-label="Buscar"><button id="mqClear" type="button" hidden aria-label="Borrar">×</button></label>
+        <input id="mq" type="search" enterkeyhint="search" placeholder="Probá: sushi barato en Palermo abierto ahora" autocomplete="off" aria-label="Buscar"><button id="mqClear" type="button" hidden aria-label="Borrar">×</button></label>
     </div>
     <div id="mMios"></div>
     <div class="mcats" id="mCats"></div>
@@ -805,6 +841,7 @@
     <div id="orOpts"></div>
     <div class="go"><button class="clear" data-close-sheet>Cancelar</button></div>
   </div></div>
+  <div class="msheet" id="mRankSheet" hidden role="dialog" aria-labelledby="hRank"><div class="box"><div class="rkw" id="rkBody"></div></div></div>
   <div class="msheet" id="mRutaSheet" hidden role="dialog" aria-labelledby="hRutaC"><div class="box">
     <h3 id="hRutaC">Te pasaron una ruta</h3><div class="rcw" id="rcBody"></div>
     <div class="go"><button class="clear" id="rcVer">Ver en el mapa</button><button class="ok" id="rcCargar">Cargar</button></div>
@@ -835,10 +872,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/deck.gl@9.1.14/dist.min.js"></script>
-<script src="geo.js?v=fd1679f"></script>
-<script src="calles.js?v=fd1679f"></script>
-<script src="landmarks.js?v=fd1679f"></script>
-<script src="places.js?v=fd1679f"></script>
+<script src="geo.js?v=f4057c2"></script>
+<script src="calles.js?v=f4057c2"></script>
+<script src="landmarks.js?v=f4057c2"></script>
+<script src="places.js?v=f4057c2"></script>
 <script>
 (function(){
 'use strict';
@@ -926,8 +963,64 @@ function toks(q){ const w=[...new Set(nrm(q||'').split(' ').filter(Boolean))]; l
   return u.map(t=>SIN[t]||(t.length>=6&&t.endsWith('es')?[t,t.slice(0,-2)]:t.length>=5&&t.endsWith('s')?[t,t.slice(0,-1)]:[t])) }
 const alcanza=(h,nw,a)=>a.length<=3?h.includes(' '+a+' ')||nw.includes(' '+a):h.includes(' '+a);
 function tokOk(p,T){ for(const k of T){ let ok=false; for(const a of k) if(alcanza(p._h,p._nw,a)){ ok=true; break } if(!ok) return false } return true }
+/* ---------- 'Preguntale al mapa': lo escrito en criollo se traduce a filtros ----------
+   'sushi barato en palermo abierto ahora' → categoría Sushi + Barato + barrio Palermo + Abierto ahora; lo que no se reconoce
+   sigue como búsqueda de texto. Son filtros de la búsqueda (no tocan los botones): al borrar el texto se van.
+   Si así no queda ningún lugar, se busca el texto tal cual (nlOff) por si era el nombre de un lugar. */
+const NL_CAT=[['japo',['comida japonesa','sushi','sushis','japones','japonesa','japoneses']],['parrilla',['parrilla','parrillas','asado','asados','parrillada']],
+  ['pizza',['pizza','pizzas','pizzeria','pizzerias']],['burger',['burger','burgers','hamburguesa','hamburguesas','hamburgueseria','hamburgueserias']],
+  ['helado',['helado','helados','heladeria','heladerias']],['cafe',['cafe','cafes','cafeteria','cafeterias','brunch','desayuno','desayunos','merienda','meriendas']],
+  ['bar',['bar','bares','tragos','trago','cocteles','coctel','cocteleria','birra','birras','cerveza','cervezas','cerveceria','vermu','vermut']],
+  ['bodegon',['bodegon','bodegones','cantina','cantinas']],['autor',['cocina de autor']]];
+const NL_TAG=[['abierto',['abierto ahora','abiertos ahora','abierto','abiertos','ahora']],['patio',['aire libre','patio','terraza','afuera','jardin']],
+  ['tarde',['hasta tarde','trasnoche','madrugada']],['vistas',['vista','vistas']],['notable',['notable','notables','historico','historicos']],
+  ['parado',['de parado','al paso']],['veggie',['vegano','vegana','veganos','veganas','vegetariano','vegetariana','vegetarianos','veggie']],
+  ['sintacc',['sin tacc','sin gluten','gluten free','celiaco','celiaca','celiacos','celiacas','tacc']],['michelin',['estrella michelin','michelin']],
+  ['g45',['mejor puntuados','mejor puntuado','bien puntuados','bien puntuado','puntaje alto']]];
+const NL_BARATO='barato barata baratos baratas economico economica economicos accesible'.split(' ');
+const NL_CARO='caro cara caros elegante elegantes lujo fino fina top cheto cheta paquete'.split(' ');
+const NL_RELLENO=new Set('algo lugar lugares sitio donde quiero queremos busco buscamos para comer cenar almorzar tomar ir rico rica ricos ricas bueno buena buenos buenas buen mejor mejores lindo linda hoy noche cita romantico romantica amigos amigas familia grupo solo sola pareja personas por zona barrio me mi nos un una unos unas que y o a al el la los las de del con en cerca'.split(' '));
+const NL_ALIAS={'palermo soho':'Palermo','soho':'Palermo','palermo hollywood':'Palermo','hollywood':'Palermo','las canitas':'Palermo','canitas':'Palermo','palermo chico':'Palermo',
+  'microcentro':'San Nicolás','centro':'San Nicolás','tribunales':'San Nicolás','once':'Balvanera','abasto':'Balvanera','barrio chino':'Belgrano','barrio norte':'Recoleta'};
+let nlOff=false, nlC={q:null,v:null}, NL_BS=null;
+function parseNL(q){
+  let t=' '+nrm(q||'')+' '; if(!t.trim()) return null;
+  const r={cats:new Set(),tags:new Set(),barrio:'',barato:false,caro:false,origen:null,gps:false,et:[]};
+  const saca=fr=>{ const k=' '+fr+' '; if(!t.includes(k)) return false; t=t.replace(k,' '); return true };
+  // 'cerca de/del <estación, monumento o barrio>' y 'cerca mío'
+  const mc=t.match(/ cerca (?:de la |del |de |al |a )?(.*)$/);
+  if(mc){ const resto=mc[1].trim(), w=resto.split(' ');
+    if(!resto||/^(mio|mia|mi|aca|tuyo)( |$)/.test(resto)){ r.gps=true; t=t.replace(/ cerca (?:de )?(?:mio|mia|mi|aca|tuyo)? ?/,' ') }
+    else for(let n=Math.min(4,w.length);n>=1;n--){ const fr=w.slice(0,n).join(' '); if(fr.length<4) continue;
+      const o=ORIGENES.find(o=>o._n===fr)||ORIGENES.find(o=>o._n.startsWith(fr+' ')||o._n.endsWith(' '+fr));
+      if(o){ r.origen=o; t=t.replace(new RegExp(' cerca (?:de la |del |de |al |a )?'+fr+' '),' '); break } } }
+  for(const [cat,frs] of NL_CAT) for(const fr of frs) if(saca(fr)) r.cats.add(cat);
+  for(const [tag,frs] of NL_TAG) for(const fr of frs) if(saca(fr)) r.tags.add(tag);
+  for(const w of NL_BARATO) if(saca(w)) r.barato=true;
+  for(const w of NL_CARO) if(saca(w)) r.caro=true;
+  if(!NL_BS) NL_BS=[...Object.keys(NL_ALIAS).map(k=>[k,NL_ALIAS[k]]),...BNOMBRES.map(b=>[nrm(b),b])].sort((a,b)=>b[0].length-a[0].length);
+  for(const [k,b] of NL_BS) if(k.length>=4&&saca(k)){ r.barrio=b; break }
+  if(!(r.cats.size||r.tags.size||r.barrio||r.barato||r.caro||r.origen||r.gps)) return null;
+  r.resto=t.trim().split(' ').filter(w=>w&&!NL_RELLENO.has(w)&&!/^\d+$/.test(w)).join(' ');
+  const TL={abierto:'Abierto ahora',g45:'★ 4,5+'};
+  r.et=[...[...r.cats].map(c=>CATS[c].s),...(r.barrio?[r.barrio]:[]),...(r.origen?['Cerca de '+r.origen.label]:[]),...(r.gps?['Cerca tuyo']:[]),
+    ...[...r.tags].map(k=>TL[k]||TAGS[k]||k),...(r.barato?['Barato']:[]),...(r.caro?['De categoría ($$$+)']:[]),...(r.resto?['“'+r.resto+'”']:[])];
+  return r }
+const NL=()=>{ if(nlOff||!state.q) return null; if(nlC.q!==state.q) nlC={q:state.q,v:parseNL(state.q)}; return nlC.v };
+const qTexto=()=>{ const n=NL(); return n?n.resto:state.q };
+function nlPasa(p,ignoreCat,ignoreZona){ const n=NL(); if(!n) return true;
+  if(!ignoreCat&&n.cats.size&&!n.cats.has(p.cat)) return false;
+  if(!ignoreZona&&n.barrio&&p.barrio!==n.barrio) return false;
+  if(n.barato&&p.price>2) return false;
+  if(n.caro&&p.price<3) return false;
+  for(const t of n.tags){ if(t==='g45'){ if(!(gOk(p)&&p.gr>=4.5)) return false } else if(t==='abierto'){ if(!abiertoAhora(p)) return false } else if(!(p.tags||[]).includes(t)) return false }
+  const o=!ignoreZona&&(n.origen||(n.gps&&state.geo));
+  if(o&&dist(o.lat,o.lng,p.lat,p.lng)>1500) return false;
+  return true }
+const nlDist=p=>{ const n=NL(), o=n&&(n.origen||(n.gps&&state.geo)); return o&&p&&p.lat!=null?dist(o.lat,o.lng,p.lat,p.lng):null };
+const nlBar=()=>{ const n=NL(); return n?`<div class="nlbar"><span>Entendí</span>${n.et.map(e=>`<b>${esc(e)}</b>`).join('')}${n.gps&&!state.geo?'<i>Tocá Buscar en el teclado para ubicarte</i>':''}</div>`:'' };
 let qtC={q:null,t:[]};
-const qToks=()=>{ if(qtC.q!==state.q) qtC={q:state.q,t:toks(state.q)}; return qtC.t };
+const qToks=()=>{ const k=state.q+'|'+(NL()?1:0); if(qtC.q!==k) qtC={q:k,t:toks(qTexto())}; return qtC.t };
 // relevancia con texto: el nombre exacto, el que empieza así, el que tiene todas o alguna de las palabras, y el barrio
 function relevancia(p,T,qn){ const enN=k=>k.some(a=>p._nw.includes(' '+a)), enB=k=>k.some(a=>p._b.includes(' '+a));
   return (p._n===qn?100:p._n.startsWith(qn)?60:T.every(enN)?40:T.some(enN)?20:0)+(T.some(enB)?15:0) }
@@ -1078,7 +1171,7 @@ function persistRoute(){
   DIRTY._route=routeT; guardarDirty(); subirDoc('_route');
 }
 const ud=id=>U[id]||{};
-const conDatos=d=>!!(d&&(d.want||d.been||d.rating||d.note||(d.v&&d.v.length)));   // v: fechas de visita (el diario)
+const conDatos=d=>!!(d&&(d.want||d.been||d.rating||d.note||d.rk!=null||(d.v&&d.v.length)));   // rk: tu nota del ranking (0 a 10)   // v: fechas de visita (el diario)
 function setU(id,patch){const d=Object.assign({},ud(id),patch,{t:Date.now()});if(!conDatos(d))delete U[id];else U[id]=d;persist(id)}
 
 /* ---------- geometría ---------- */
@@ -1847,33 +1940,56 @@ function setDiag(on,guardar){ DIAG=!!on;
 /* ---------- filtros ---------- */
 function dist(a,b,c,d){const R=6371000,toR=x=>x*Math.PI/180;const dLa=toR(c-a),dLo=toR(d-b);const h=Math.sin(dLa/2)**2+Math.cos(toR(a))*Math.cos(toR(c))*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
 const pdist=p=>state.geo?dist(state.geo.lat,state.geo.lng,p.lat,p.lng):null;
+/* ---------- horarios (p.h: tramos [inicio, fin] en minutos de la semana, domingo 00:00 = 0, hora de Buenos Aires) ---------- */
+const DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const minSemana=()=>{ const d=new Date(Date.now()-3*36e5); return d.getUTCDay()*1440+d.getUTCHours()*60+d.getUTCMinutes() };   // Argentina: UTC-3 todo el año
+const hhmm=m=>{ m=((m%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0') };
+// {abierto, hasta|desde, txt corto, txt largo} o null si no hay horario
+function estadoHorario(p,ahora){
+  if(!p.h||!p.h.length) return null; const m=ahora??minSemana();
+  if(p.h.length===1&&p.h[0][0]===0&&p.h[0][1]>=10080) return {abierto:true,txt:'Abierto 24 h',largo:'Abierto las 24 horas'};
+  for(const [a,b] of p.h){ for(const k of [0,10080]){ if(m+k>=a&&m+k<b){ const falta=b-(m+k);
+    return {abierto:true,falta,txt:falta<=60?'Cierra en '+falta+' min':'Abierto',largo:falta<=60?'Abierto · cierra en '+falta+' min':'Abierto · cierra '+hhmm(b)} } } }
+  let prox=null; for(const [a] of p.h){ const d=a>m?a-m:a+10080-m; if(prox==null||d<prox.d) prox={d,a} }
+  if(!prox) return null;
+  const dia=Math.floor(((m+prox.d)%10080)/1440), hoy=Math.floor(m/1440), cuando=dia===hoy&&prox.d<1440?'':dia===(hoy+1)%7?'mañana ':'el '+DIAS[dia]+' ';
+  return {abierto:false,txt:'Cerrado',largo:'Cerrado · abre '+cuando+hhmm(prox.a)} }
+// los horarios de la semana, día por día (empezando por hoy)
+function semanaHtml(p){ if(!p.h) return ''; const hoy=Math.floor(minSemana()/1440);
+  return [0,1,2,3,4,5,6].map(i=>{ const d=(hoy+i)%7, ts=p.h.filter(([a])=>Math.floor((a%10080)/1440)===d).map(([a,b])=>b-a>=1440*7?'24 h':hhmm(a)+'–'+hhmm(b));
+    return `<span class="${i?'':'hoy'}">${DIAS[d][0].toUpperCase()+DIAS[d].slice(1,3)}</span><b class="${i?'':'hoy'}">${ts.length?ts.join(', '):'Cerrado'}</b>` }).join('') }
+const abiertoAhora=p=>{ const e=estadoHorario(p); return !!(e&&e.abierto) };
+const conHorario=PL.some(p=>p.h);
 function passes(p,ignoreCat,ignoreZona,ignoreQ){   // ignoreZona: sin barrio, "cerca" ni "solo estos" (lo que muestra la lista de una zona); ignoreQ: sin el texto buscado
   if(!ignoreZona&&state.only&&!state.only.has(p.id)) return false;
   if(!ignoreCat&&state.cats.size&&!state.cats.has(p.cat)) return false;
   if(state.price&&p.price!==state.price) return false;   // precio exacto, no "hasta"
   if(state.barato&&p.price>2) return false;
   if(!ignoreZona&&state.barrio&&p.barrio!==state.barrio) return false;
-  for(const t of state.tags){ if(t==='g45'){ if(!(gOk(p)&&p.gr>=4.5)) return false; continue } if(!(p.tags||[]).includes(t)) return false; }
+  for(const t of state.tags){ if(t==='g45'){ if(!(gOk(p)&&p.gr>=4.5)) return false; continue } if(t==='abierto'){ if(!abiertoAhora(p)) return false; continue } if(!(p.tags||[]).includes(t)) return false; }
   const u=ud(p.id);
   if(state.list==='want'&&!u.want) return false;
   if(state.list==='been'&&!u.been) return false;
   if(state.list==='todo'&&u.been) return false;
   if(!ignoreZona&&state.near&&state.geo&&pdist(p)>state.nearR) return false;
-  if(state.q&&!ignoreQ){ const T=qToks(); if(T.length&&!tokOk(p,T)) return false }   // por palabras, contra el índice (p._h)
+  if(state.q&&!ignoreQ){ if(!nlPasa(p,ignoreCat,ignoreZona)) return false; const T=qToks(); if(T.length&&!tokOk(p,T)) return false }   // por palabras, contra el índice (p._h)
   return true;
 }
 const DRANK={star2:4,star1:3,bib:2,recommended:1};
 // puntaje interno para "lo mejor primero": Michelin, puntaje de Google (con peso por cantidad de reseñas) y cercanía
 function score(p){ let s=(DRANK[p.dist]||0)*1.2; if(p.gr!=null){ const conf=Math.min(1,(p.gn||0)/300); s+=(p.gr-3.8)*2.2*(0.45+0.55*conf) } if(p.unv) s-=0.5; if(state.near&&state.geo){const d=pdist(p);s+=Math.max(0,1.5-d/700)} return s }
 function filtered(){
-  const arr=PL.filter(p=>passes(p)), by=state.sort, T=state.q?qToks():[];
+  nlOff=false; let arr=PL.filter(p=>passes(p));
+  if(!arr.length&&NL()){ nlOff=true; arr=PL.filter(p=>passes(p)) }   // sin resultados así: el texto tal cual (quizás era un nombre)
+  const by=state.sort, T=state.q?qToks():[];
   // con texto, en 'Lo mejor primero' manda la relevancia (el nombre buscado arriba) y después el puntaje o la distancia
-  const R=T.length&&by==='auto'?new Map(arr.map(p=>[p,relevancia(p,T,nrm(state.q))])):null, rel=p=>R?R.get(p):0;
+  const R=T.length&&by==='auto'?new Map(arr.map(p=>[p,relevancia(p,T,nrm(qTexto()))])):null, rel=p=>R?R.get(p):0;
   if(by==='cerca'&&state.geo) arr.sort((a,b)=>pdist(a)-pdist(b));
   else if(by==='puntaje') arr.sort((a,b)=>bay(b)-bay(a)||(b.gn||0)-(a.gn||0));
   else if(by==='precio') arr.sort((a,b)=>a.price-b.price||score(b)-score(a));
   else if(by==='nombre') arr.sort((a,b)=>a.n.localeCompare(b.n,'es'));
   else if(state.geo&&state.near) arr.sort((a,b)=>rel(b)-rel(a)||pdist(a)-pdist(b));
+  else if(nlDist(arr[0])!=null) arr.sort((a,b)=>rel(b)-rel(a)||nlDist(a)-nlDist(b));   // 'cerca de …': lo más cerca primero
   else arr.sort((a,b)=>rel(b)-rel(a)||score(b)-score(a)||a.n.localeCompare(b.n,'es'));
   return arr}
 // todos los filtros a cero de una sola vez (Limpiar en PC y en el celular); el orden solo vuelve si lo había cambiado Cerca
@@ -1887,7 +2003,7 @@ function filtrosActivos(){ const f=[];
   if(state.near&&state.geo) f.push(['near',cercaTxt()]);
   if(state.price) f.push(['price',PR[state.price]]);
   if(state.barato) f.push(['barato','Barato']);
-  state.tags.forEach(t=>f.push(['tag:'+t,t==='g45'?'★ 4,5+':TAGS[t]||t]));
+  state.tags.forEach(t=>f.push(['tag:'+t,t==='g45'?'★ 4,5+':t==='abierto'?'Abierto ahora':TAGS[t]||t]));
   if(state.list) f.push(['list',LISTL[state.list]]);
   return f }
 function quitarFiltro(k){
@@ -1902,7 +2018,7 @@ function quitarFiltro(k){
   else if(k.startsWith('tag:')) state.tags.delete(k.slice(4));
   syncFilterUI(); listLimit=120; mLimit=40; renderAll(); kick() }
 // una sola búsqueda para los dos buscadores (PC #q y celular #mq); el que se está escribiendo (src) no se toca
-function setQuery(v,src){ state.q=String(v||'').trim();
+function setQuery(v,src){ state.q=String(v||'').trim(); nlOff=false;
   for(const el of [$('#q'),$('#mq')]) if(el&&el!==src&&el.value.trim()!==state.q) el.value=state.q;
   $('#qClear').hidden=!state.q; $('#mqClear').hidden=!state.q }
 // lo que acompaña a una búsqueda: monumentos y barrios con ese nombre y, sin resultados, '¿Quisiste decir…?'
@@ -1961,21 +2077,23 @@ function renderList(){
   if(!cur.length){listaIds='';el.innerHTML=lmRows||`<div class="empty"><b>Nada por acá</b>${X.sug?sugHtml(X.sug):'Aflojá los filtros o probá otra búsqueda.'}${filtroActivo()?'<br><button class="ghost" data-f="all">Limpiar filtros</button>':''}</div>`;return}
   const shown=cur.slice(0,listLimit), rec=filtroActivo()?'':bloqueRecientes();
   const ids=(rec?'rec:'+REC.join()+'|':'')+lmHits.map(l=>l.id).concat(X.bs.map(b=>b.n),shown.map(p=>p.id)).join(); el.classList.toggle('noanim',ids===listaIds); listaIds=ids;   // mismas filas: sin la cascada
-  el.innerHTML=rec+lmRows+shown.map((p,i)=>{const u=ud(p.id);const d=state.near?pdist(p):null;
+  el.innerHTML=nlBar()+rec+lmRows+shown.map((p,i)=>{const u=ud(p.id);const d=state.near?pdist(p):null;
     const dm2=p.dist?`<span class="m gold">${p.dist==='star2'?'★★':p.dist==='star1'?'★':p.dist==='bib'?'Bib':'Michelin'}</span>`:'';
-    return `<div class="li ${state.sel===p.id?'is-sel':''}" data-id="${p.id}" style="--c:${CATS[p.cat].c};--i:${i}" tabindex="0" role="button">${stn(p,'sm')}<div class="t"><b><span class="nm">${esc(p.n)}</span>${dm2}${u.been?'<span class="m been">✓ fui</span>':u.want?'<span class="m want">★ quiero</span>':''}</b><span>${esc(p.sub)} · ${esc(p.barrio)}</span></div><div class="r"><b>${PR[p.price]}</b>${p.gr!=null?`<span class="g">★ ${fmtR(p.gr)}</span>`:''}${d!=null?fmtD(d):''}</div></div>`}).join('')
+    return `<div class="li ${state.sel===p.id?'is-sel':''}" data-id="${p.id}" style="--c:${CATS[p.cat].c};--i:${i}" tabindex="0" role="button">${stn(p,'sm')}<div class="t"><b><span class="nm">${esc(p.n)}</span>${dm2}${u.been?'<span class="m been">✓ fui</span>':u.want?'<span class="m want">★ quiero</span>':''}</b><span>${(eh=>eh?`<em class="ab${eh.abierto?' on':''}">${esc(eh.txt)}</em> · `:'')(estadoHorario(p))}${esc(p.sub)} · ${esc(p.barrio)}</span></div><div class="r"><b>${PR[p.price]}</b>${p.gr!=null?`<span class="g">★ ${fmtR(p.gr)}</span>${resenas(p)}`:''}${d!=null?fmtD(d):''}</div></div>`}).join('')
     +(cur.length>listLimit?`<div class="more"><button class="ghost" id="moreBtn">Ver más (${cur.length-listLimit} restantes)</button></div>`:'');
   const s=el.querySelector('.li.is-sel'); if(s&&!isMobile()) s.scrollIntoView({block:'nearest'});
 }
 $('#list').addEventListener('click',e=>{ if(e.target.id==='moreBtn'){listLimit+=120;renderList();return}
   const x=e.target.closest('[data-sug],[data-rec],[data-ant],[data-f]'); if(x){ accionBusqueda(x); return }
-  const li=e.target.closest('.li'); if(!li) return; if(li.dataset.lm) openLandmark(li.dataset.lm); else if(li.dataset.zona) verZona(li.dataset.zona); else select(li.dataset.id,true)});
+  const li=e.target.closest('.li'); if(!li) return; if(li.dataset.lm) openLandmark(li.dataset.lm); else if(li.dataset.zona) verZona(li.dataset.zona); else conTransicion(li.querySelector('.rnd'),()=>select(li.dataset.id,true))});
 $('#list').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const li=e.target.closest('.li');if(!li)return;e.preventDefault();if(li.dataset.lm)openLandmark(li.dataset.lm);else if(li.dataset.zona)verZona(li.dataset.zona);else select(li.dataset.id,true)});
 // filas de la ficha del monumento ('Para comer y tomar cerca'): Enter o Espacio las abren como el clic
 $('#cardBody').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.li[data-go]');if(g){e.preventDefault();g.click()}});
 
 const fmtN=n=>n==null?'':n>=1000?(n/1000).toFixed(n>=10000?0:1).replace('.',',')+' mil':String(n);
 const fmtR=r=>r.toFixed(1).replace('.',',');
+// debajo del puntaje de las listas: sobre cuántas reseñas de Google está hecho
+const resenas=p=>p.gn!=null?`<span class="gnr">${fmtN(p.gn)} ${p.gn===1?'reseña':'reseñas'}</span>`:'';
 function gBlock(p){ if(p.gr==null) return ''; const pocas=p.gn!=null&&p.gn<30;
   const href=safeUrl(p.gu)||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.n+' Buenos Aires'));
   return `<a class="gg${pocas?' pocas':''}" href="${esc(href)}" target="_blank" rel="noopener" title="Reseñas, fotos y horarios en Google Maps"><span class="gg-n">${fmtR(p.gr)}</span><span><span class="gg-st"><i style="--v:${Math.max(0,Math.min(100,p.gr/5*100))}%"></i></span><span class="gg-c">${p.gn!=null?fmtN(p.gn)+' reseñas':'Sin cantidad de reseñas'}${pocas?' · pocas reseñas':''}</span></span><span class="gg-g">Ver en Google ↗</span></a>` }
@@ -2012,12 +2130,56 @@ function refrescarListas(){ uVer++; renderGen++; cur=filtered();
   if(isMobile()) renderMobile(); else { renderChips(); renderList() }
   countTo($('#cnt'),cur.length); kick(); if(isMobile()&&M.tab==='mapa') refrescarZona() }
 // los botones de la ficha cambian en el lugar (clase y texto)
+/* ---------- mi ranking, al estilo Beli: en vez de estrellas, comparar de a dos ----------
+   Al marcar Ya fui: ¿te encantó, estuvo bien o no te gustó? y después '¿cuál te gustó más?' contra tus lugares de ese grupo
+   (búsqueda binaria: con 30 rankeados son 5 preguntas). La nota (u.rk, 0 a 10) se reparte pareja dentro del grupo. */
+const GRUPO={top:[6.7,10,'Me encantó'],bien:[3.4,6.7,'Estuvo bien'],no:[0,3.4,'No me gustó']};
+const grupoDe=v=>v>=6.7?'top':v>=3.4?'bien':'no';
+const misRank=()=>PL.filter(p=>ud(p.id).rk!=null).sort((a,b)=>ud(b.id).rk-ud(a.id).rk||(ud(b.id).t||0)-(ud(a.id).t||0));
+const vibrar=(ms=12)=>{ try{ if(navigator.vibrate) navigator.vibrate(ms) }catch(e){} };   // Android (en iPhone no hace nada)
+let RK=null;
+function abrirRanking(id){ const p=byId[id]; if(!p) return; RK={id}; pintarRanking(); $('#mRankSheet').hidden=false; syncNav() }
+function pintarRanking(){ const p=byId[RK.id], b=$('#rkBody');
+  if(!RK.g){ b.innerHTML=`<h3 id="hRank">¿Qué tal estuvo ${esc(p.n)}?</h3><p class="ohint">Rankeá tus lugares comparándolos: así sale tu top.</p>
+    <div class="rkg">${Object.entries(GRUPO).map(([k,g])=>`<button data-g="${k}" class="rkg-${k}">${g[2]}</button>`).join('')}</div>
+    <div class="go"><button class="clear" data-rk="cerrar">Ahora no</button></div>`; return }
+  if(RK.lo>=RK.hi){ insertarRank(RK.lo); return }
+  const mid=Math.floor((RK.lo+RK.hi)/2), q=RK.lista[mid], faltan=Math.ceil(Math.log2(RK.hi-RK.lo+1));
+  RK.mid=mid;
+  b.innerHTML=`<h3 id="hRank">¿Cuál te gustó más?</h3><p class="ohint">${faltan<=1?'Última pregunta':'Quedan ~'+faltan+' preguntas'} · ${esc(GRUPO[RK.g][2])}</p>
+    <div class="rkvs"><button data-rk="nuevo" style="--c:${CATS[p.cat].c}">${stn(p,'sm')}<b>${esc(p.n)}</b><small>${esc(p.sub)} · ${esc(p.barrio)}</small></button>
+    <i>vs</i><button data-rk="viejo" style="--c:${CATS[q.cat].c}">${stn(q,'sm')}<b>${esc(q.n)}</b><small>Tu nota: ${fmtR(ud(q.id).rk)}</small></button></div>
+    <div class="go"><button class="clear" data-rk="igual">Parecidos</button><button class="clear" data-rk="cerrar">Dejar así</button></div>` }
+function insertarRank(i){ const id=RK.id, [lo,hi]=GRUPO[RK.g], L=RK.lista.slice(); L.splice(i,0,byId[id]);
+  const N=L.length; L.forEach((p,j)=>{ const v=Math.round((hi-(j+.5)*(hi-lo)/N)*10)/10; if(ud(p.id).rk!==v) setU(p.id,{rk:v}) });
+  RK=null; closeSheets(); vibrar(25); refrescarListas(); if(state.sel===id) pintarMarcas(id);
+  const todos=misRank(), pos=todos.findIndex(p=>p.id===id)+1;
+  toast(`${byId[id].n}: ${fmtR(ud(id).rk)} · puesto ${pos} de tus ${todos.length}`) }
+$('#mRankSheet').addEventListener('click',e=>{ const s=$('#mRankSheet'); if(e.target===s){ RK=null; closeSheets(); return }
+  const g=e.target.closest('[data-g]'), a=e.target.closest('[data-rk]'); if(!RK) return;
+  if(g){ vibrar(); RK.g=g.dataset.g; const [lo,hi]=GRUPO[RK.g];
+    RK.lista=misRank().filter(p=>p.id!==RK.id&&grupoDe(ud(p.id).rk)===RK.g); RK.lo=0; RK.hi=RK.lista.length; pintarRanking(); return }
+  if(!a) return; const k=a.dataset.rk; vibrar();
+  if(k==='cerrar'){ if(RK.g) insertarRank(RK.mid??RK.lo); else { RK=null; closeSheets() } return }
+  if(k==='igual'){ insertarRank(RK.mid); return }
+  if(k==='nuevo') RK.hi=RK.mid; else RK.lo=RK.mid+1;
+  pintarRanking() });
+function rankHtml(id){ const u=ud(id); if(!u.been) return '';
+  if(u.rk==null) return `<div class="rank"><span>¿Qué lugar de tu top ocupa?</span><button class="ghost" data-a="rank">Rankear</button></div>`;
+  const todos=misRank(), pos=todos.findIndex(p=>p.id===id)+1;
+  return `<div class="rank"><b class="rk-${grupoDe(u.rk)}">${fmtR(u.rk)}</b><span>Tu nota · puesto ${pos} de ${todos.length}</span><button class="ghost" data-a="rank">Rankear de nuevo</button></div>` }
+// el top para compartir: link público con #top=id1,id2… y el texto con las notas
+async function compartirTop(){ const t=misRank().slice(0,10); if(!t.length) return;
+  const url=BASE+'#top='+t.map(p=>p.id).join(','), txt='Mi top del Morfi:\n'+t.map((p,i)=>`${i+1}. ${p.n} (${fmtR(ud(p.id).rk)}) · ${p.barrio}`).join('\n');
+  if(navigator.share){ try{ await navigator.share({title:'Mi top del Morfi',text:txt,url}); return }catch(e){ if(e&&e.name==='AbortError') return } }
+  try{ await navigator.clipboard.writeText(txt+'\n'+url); toast('Tu top quedó copiado') }catch(e){ toast('No pude copiar el link') } }
 function pintarMarcas(id){ const u=ud(id), r=state.route.includes(id), f=$('#cardFoot'), b=$('#cardBody');
   const w=f.querySelector('[data-a="want"]'); if(w){ w.classList.toggle('on',!!u.want); w.textContent=u.want?'★ Quiero ir':'☆ Quiero ir'; w.setAttribute('aria-pressed',!!u.want) }
   const v=f.querySelector('[data-a="been"]'); if(v){ v.classList.toggle('on',!!u.been); v.textContent=u.been?'✓ Ya fui':'Ya fui'; v.setAttribute('aria-pressed',!!u.been) }
   const rt=b.querySelector('[data-a="route"]'); if(rt){ rt.textContent=r?'✕ Sacar de mi ruta':'+ Mi ruta'; rt.setAttribute('aria-pressed',r) }
   b.querySelectorAll('.rate button').forEach(x=>x.classList.toggle('on',(u.rating||0)>=+x.dataset.r));
-  const di=b.querySelector('.diario-w'); if(di) di.innerHTML=diarioHtml(u) }
+  const di=b.querySelector('.diario-w'); if(di) di.innerHTML=diarioHtml(u);
+  const rw=b.querySelector('.rank-w'); if(rw) rw.innerHTML=rankHtml(id) }
 // diario de visitas: fechas locales 'AAAA-MM-DD' en u.v; u.sf = visitas anteriores sin fecha (se suma al anotar la primera)
 const hoyISO=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') };
 const MESES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -2036,13 +2198,15 @@ function accionFicha(a,el){
     const patch={v:[...v,hoy]}; if(u.been&&!u.v) patch.sf=(u.sf||0)+1;   // marcado antes del diario: esa visita sin fecha también cuenta
     setU(id,patch); pintarMarcas(id); pulso(el); refrescarListas(); const n=visitas(ud(id)); toast(`Anotado: fuiste ${n} ${n===1?'vez':'veces'} a ${p.n}`); return }
   if(a==='want'||a==='been'){ if(!p) return; const on=!ud(id)[a], patch={[a]:on};
-    if(a==='been'){ const v=(ud(id).v||[]).slice(), hoy=hoyISO(); if(on){ if(v[v.length-1]!==hoy) v.push(hoy) } else if(v[v.length-1]===hoy) v.pop(); patch.v=v }   // desmarcar el mismo día: fue un toque de más
+    if(a==='been'){ const v=(ud(id).v||[]).slice(), hoy=hoyISO(); if(on){ if(v[v.length-1]!==hoy) v.push(hoy) } else { if(v[v.length-1]===hoy) v.pop(); patch.rk=undefined } patch.v=v }   // sin 'Ya fui' no queda en tu ranking   // desmarcar el mismo día: fue un toque de más
     setU(id,patch); pintarMarcas(id); pulso(el); refrescarListas();
     if(a==='want') toast(on?'Anotado en "Quiero ir"':'Sacado de "Quiero ir"');
-    else if(on){ toast('¡Sellado! Ya fuiste a '+p.n); burst(p); checkPass() }
+    else if(on){ toast('¡Sellado! Ya fuiste a '+p.n); burst(p); checkPass(); if(ud(id).rk==null) setTimeout(()=>{ if(ud(id).been) abrirRanking(id) },900) }
+    vibrar(on?20:10);
     return }
   if(a==='route'){ if(!p) return; toggleRoute(id); pintarMarcas(id); pulso(el); if(isMobile()) renderMobile(); return }
   if(a==='share'){ if(p) compartir(p); return }
+  if(a==='rank'){ if(p) abrirRanking(id); return }
   if(a==='map'){ mTab('mapa'); return }   // la ficha asoma y el mapa muestra el lugar arriba de ella
   if(a==='lmall'){ const l=lmById[state.lmSel]; if(!l) return; const near=placesNear(l);
     state.only=new Set(near.map(x=>x.p.id)); state.onlyLabel='Cerca de '+l.n; state.cats.clear(); renderAll();
@@ -2079,7 +2243,7 @@ function renderCard(id,animate){
   body.innerHTML=`
     <div class="chero" style="--c:${c}"><div class="band"></div><div class="glow"></div><div class="wm">${esc(p.code.replace(' ',''))}</div>
       <div class="top">${stn(p,'lg')}<div style="flex:1;min-width:0"><div class="pill">${esc(p.code)} · ${esc(CATS[p.cat].l)}</div><h2>${title}</h2></div><button class="x" id="cardClose" aria-label="Cerrar">✕</button></div>
-      <div class="meta"><b>${esc(p.sub)}</b><span>${esc(p.barrio)}</span><span class="pr">${PR[p.price]}</span>${p.gr!=null?`<span class="gmini${pocas?' pocas':''}">★ ${fmtR(p.gr)}</span>`:''}${d!=null?`<span>${fmtD(d)} · ${walkMin(d)} min a pie${esManual()?' '+esc(desdeTxt()):''}</span>`:''}${seq}</div>
+      <div class="meta"><b>${esc(p.sub)}</b><span>${esc(p.barrio)}</span><span class="pr">${PR[p.price]}</span>${p.gr!=null?`<span class="gmini${pocas?' pocas':''}">★ ${fmtR(p.gr)}${p.gn!=null?' · '+fmtN(p.gn)+' reseñas':''}</span>`:''}${d!=null?`<span>${fmtD(d)} · ${walkMin(d)} min a pie${esManual()?' '+esc(desdeTxt()):''}</span>`:''}${(eh=>eh?`<span class="abm${eh.abierto?' on':''}${eh.falta<=60?' pronto':''}">${esc(eh.largo)}</span>`:'')(estadoHorario(p))}${seq}</div>
       <div class="badges">${badges}</div>
       ${gBlock(p)}
     </div>
@@ -2090,6 +2254,8 @@ function renderCard(id,animate){
       <div class="pick"><em>Qué pedir</em>${esc(p.pick)}</div>
       <div class="acts2"><button class="ghost" data-a="route" aria-pressed="${inRoute}">${inRoute?'✕ Sacar de mi ruta':'+ Mi ruta'}</button><button class="ghost" data-a="share">Compartir</button>${isMobile()?'<button class="ghost mapa" data-a="map">Ver en el mapa</button>':''}</div>
       <div class="diario-w">${diarioHtml(u)}</div>
+      <div class="rank-w">${rankHtml(id)}</div>
+      ${p.h?`<details class="semana"><summary>Horarios de la semana</summary><div class="kv">${semanaHtml(p)}</div><small class="small">Según Google${p.ht?' ('+p.ht.split('-').reverse().slice(0,2).join('/')+')':''}: confirmá en feriados.</small></details>`:''}
       <div class="kv">${p.addr?`<span>Dirección</span><b>${esc(p.addr)}</b>`:''}${p.subte?`<span>Subte</span><b>${esc(p.subte)} · ${fmtD(p.subteM)}</b>`:''}${(()=>{const nl=nearestLm(p);return nl?`<span>Cerca de</span><b><a href="#" data-lm="${nl.l.id}">${esc(nl.l.n)}</a> · ${fmtD(nl.d)}</b>`:''})()}<span>Comuna</span><b>${p.com||'–'}</b>${fuente?`<span>Fuente</span><b><a href="${esc(fuente)}" target="_blank" rel="noopener">${esc(p.src||'Ver la reseña')} ↗</a></b>`:''}${gu?`<span>Google</span><b><a href="${esc(gu)}" target="_blank" rel="noopener">Ver en Google ↗</a></b>`:''}</div>
       <div class="rate"><span>Mi puntaje</span>${[1,2,3,4,5].map(n=>`<button data-r="${n}" class="${(u.rating||0)>=n?'on':''}" aria-label="${n} estrellas">★</button>`).join('')}</div>
       <textarea class="note" id="aNote" placeholder="Notas: qué pedí, con quién fui, qué repetir…">${esc(u.note||'')}</textarea>
@@ -2157,7 +2323,7 @@ $('#fClear').onclick=limpiarFiltros;
   // etiquetas en dos grupos: Distinciones (puntaje, Michelin, rankings) y Estilo (el resto)
   const DIST_T=['michelin','bib','50best','notable'], hay=k=>PL.some(p=>(p.tags||[]).includes(k)), tb=([k,v])=>`<button class="tag" data-t="${k}">${v}</button>`;
   $('#tagBarD').innerHTML=(PL.some(gOk)?`<button class="tag" data-t="g45">★ 4,5+ en Google</button>`:'')+Object.entries(TAGS).filter(([k])=>DIST_T.includes(k)&&hay(k)).map(tb).join('');
-  $('#tagBar').innerHTML=Object.entries(TAGS).filter(([k])=>!DIST_T.includes(k)&&hay(k)).map(tb).join('');
+  $('#tagBar').innerHTML=(conHorario?`<button class="tag" data-t="abierto">Abierto ahora</button>`:'')+Object.entries(TAGS).filter(([k])=>!DIST_T.includes(k)&&hay(k)).map(tb).join('');
   const tagClick=e=>{const b=e.target.closest('.tag');if(!b)return;const t=b.dataset.t;state.tags.has(t)?state.tags.delete(t):state.tags.add(t);syncFilterUI();listLimit=120;mLimit=40;renderAll()};
   $('#tagBar').onclick=tagClick; $('#tagBarD').onclick=tagClick;
 }
@@ -2167,7 +2333,7 @@ function moverFiltros(cel){ const fb=$('#mFiltBody'); if(!fb||!!fb.dataset.on===
 function syncFilterUI(){$$('#segPrice button').forEach(b=>b.classList.toggle('on',+b.dataset.p===state.price));$$('#segList button').forEach(b=>b.classList.toggle('on',b.dataset.l===state.list));$$('#tagBar .tag,#tagBarD .tag').forEach(b=>b.classList.toggle('on',state.tags.has(b.dataset.t)));$('#selBarrio').value=state.barrio;
   const ss=$('#selSort'); ss.value=state.sort; ss.querySelector('[value="cerca"]').disabled=!state.geo; $('#qClear').hidden=!state.q; $('#mqClear').hidden=!state.q}
 let qt; $('#q').oninput=e=>{clearTimeout(qt);qt=setTimeout(()=>{setQuery(e.target.value,e.target);listLimit=120;renderAll();if(state.q&&!isMobile())openDrawer(true)},160)};
-$('#q').onkeydown=e=>{if(e.key!=='Enter')return; clearTimeout(qt); setQuery(e.target.value,e.target); listLimit=120; renderAll(); const lh=LMS.filter(l=>nrm(l.n).includes(nrm(state.q||'')));if(state.q&&lh.length===1&&cur.length===0){openLandmark(lh[0].id);return} const u=unicoBuscado(); if(u)select(u.id,true); else if(cur.length){openDrawer(true); if(cur.length<80) fitPlaces(cur)}};
+$('#q').onkeydown=e=>{if(e.key!=='Enter')return; clearTimeout(qt); setQuery(e.target.value,e.target); listLimit=120; renderAll(); if(NL()&&NL().gps&&!state.geo){ cercaGPS(); return } const lh=LMS.filter(l=>nrm(l.n).includes(nrm(state.q||'')));if(state.q&&lh.length===1&&cur.length===0){openLandmark(lh[0].id);return} const u=unicoBuscado(); if(u)select(u.id,true); else if(cur.length){openDrawer(true); if(cur.length<80) fitPlaces(cur)}};
 $('#qClear').onclick=()=>{setQuery('');listLimit=120;renderAll()};
 $('#btnSearch').onclick=()=>{const s=$('#searchBox');s.classList.toggle('open');$('#chips').classList.toggle('pushed',s.classList.contains('open'));if(s.classList.contains('open'))$('#q').focus()};
 $('#brand').onclick=goHome; $('#brand').onkeydown=e=>{if(e.key==='Enter')goHome()};
@@ -2347,12 +2513,14 @@ async function compartirRuta(){ const ps=state.route.filter(id=>byId[id]).map(id
   const inp=box.querySelector('input'); inp.value=url; inp.focus(); inp.select(); try{ inp.setSelectionRange(0,url.length) }catch(e){} }
 // '#r=…': te pasaron una ruta. Una hoja con las paradas: Cargar (con Deshacer) o solo verlas en el mapa
 const RC={ids:[]};
-function abrirRutaCompartida(ids){ RC.ids=ids; const ps=ids.map(id=>byId[id]), mia=state.route.filter(id=>byId[id]), km=routeKm(ps);
-  $('#hRutaC').textContent=`Te pasaron una ruta de ${ps.length} ${ps.length===1?'parada':'paradas'}`;
+function abrirRutaCompartida(ids,modo){ RC.ids=ids; RC.modo=modo||'ruta'; const top=RC.modo==='top', ps=ids.map(id=>byId[id]), mia=top?[]:state.route.filter(id=>byId[id]), km=top?0:routeKm(ps);
+  $('#hRutaC').textContent=top?`Te pasaron un top ${ps.length}`:`Te pasaron una ruta de ${ps.length} ${ps.length===1?'parada':'paradas'}`;
+  $('#rcCargar').textContent=top?'Sumar a Quiero ir':'Cargar';
   $('#rcBody').innerHTML=`<div class="stops">${ps.map((p,i)=>`<div class="stop"><span class="n">${i+1}</span><div style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.sub)} · ${esc(p.barrio)}</small></div></div>`).join('')}</div>`
     +`<p class="small">${ps.length>1?`${fmtD(km)} · ${walkMin(km)} min a pie. `:''}${mia.length&&mia.join()!==ids.join()?`Cargarla reemplaza tu ruta de ${mia.length} ${mia.length===1?'parada':'paradas'} (después podés deshacer).`:''}</p>`;
   $('#mRutaSheet').hidden=false; syncNav(); if(!isMobile()) setTimeout(()=>$('#rcCargar').focus(),30) }
-$('#rcCargar').onclick=()=>{ const n=RC.ids.length; cargarRuta(RC.ids.slice(),`Ruta cargada: ${n} ${n===1?'parada':'paradas'}`) };
+$('#rcCargar').onclick=()=>{ const n=RC.ids.length;
+  if(RC.modo==='top'){ let k=0; RC.ids.forEach(id=>{ if(!ud(id).been&&!ud(id).want){ setU(id,{want:true}); k++ } }); closeSheets(); refrescarListas(); vibrar(20); toast(k?`Sumé ${k} a Quiero ir`:'Ya los tenías todos'); return } cargarRuta(RC.ids.slice(),`Ruta cargada: ${n} ${n===1?'parada':'paradas'}`) };
 $('#rcVer').onclick=()=>{ const ids=RC.ids.slice(), ps=ids.map(id=>byId[id]); closeSheets();
   const habia=state.cats.size||filtrosActivos().length;   // cualquier filtro de Buscar podría esconder paradas: se sacan todos
   resetFiltros(); state.only=new Set(ids); state.onlyLabel='Ruta compartida'; syncFilterUI(); mLimit=40; listLimit=120;
@@ -2560,7 +2728,7 @@ $('#card .sheet-handle').addEventListener('click',()=>{ if(!isMobile()||M.tab!==
 
 /* ================= celular: buscar primero, mapa después ================= */
 const MOBQ=[
-  {k:'cerca',t:'Cerca mío'},{k:'g45',t:'★ 4,5+',cls:'gold'},{k:'barato',t:'Barato ($ y $$)'},{k:'michelin',t:'Michelin'},
+  {k:'cerca',t:'Cerca mío'},{k:'abierto',t:'Abierto ahora',cls:'abq'},{k:'g45',t:'★ 4,5+',cls:'gold'},{k:'barato',t:'Barato ($ y $$)'},{k:'michelin',t:'Michelin'},
   {k:'notable',t:'Bar notable'},{k:'parado',t:'De parado'},{k:'veggie',t:'Veggie'},{k:'sintacc',t:'Sin TACC'},{k:'tarde',t:'Hasta tarde'},{k:'patio',t:'Con patio'}];
 // filtros que viven en la hoja Filtros (las categorías tienen sus baldosas): el número de 'Filtros · N'
 const nFiltros=()=>(state.price?1:0)+state.tags.size+(state.barrio?1:0)+(state.barato?1:0)+(state.near?1:0)+(state.list?1:0);
@@ -2600,6 +2768,7 @@ function mQuickOn(k){
   return state.tags.has(k);
 }
 function mToggleQuick(k){
+  vibrar(8);
   if(k==='__radio'){ abrirRadios(); return }   // 'Cerca · 1,5 km ▾': elegir el radio
   if(k==='cerca'){ askNear(); return }
   if(k==='__limpiar') limpiarFiltros();
@@ -2612,12 +2781,13 @@ function mToggleQuick(k){
 }
 function mRowHtml(p,i,puntaje){
   const u=ud(p.id), d=state.geo?pdist(p):null, c=CATS[p.cat].c;
-  const tags=[puntaje&&u.rating?`<i class="want">${'★'.repeat(u.rating)}</i>`:'',p.dist?`<i class="gold">${p.dist==='star2'?'★★ MICHELIN':p.dist==='star1'?'★ MICHELIN':p.dist==='bib'?'BIB GOURMAND':'MICHELIN'}</i>`:'',
+  const tags=[puntaje&&u.rk!=null?`<i class="rk rk-${grupoDe(u.rk)}">#${misRank().findIndex(x=>x.id===p.id)+1} · ${fmtR(u.rk)}</i>`:puntaje&&u.rating?`<i class="want">${'★'.repeat(u.rating)}</i>`:'',p.dist?`<i class="gold">${p.dist==='star2'?'★★ MICHELIN':p.dist==='star1'?'★ MICHELIN':p.dist==='bib'?'BIB GOURMAND':'MICHELIN'}</i>`:'',
     u.been?'<i class="been">✓ YA FUI</i>':u.want?'<i class="want">★ QUIERO IR</i>':'',
     (p.tags||[]).includes('50best')?'<i>50 BEST BARS</i>':'', (p.tags||[]).includes('notable')?'<i>BAR NOTABLE</i>':''].filter(Boolean).join('');
+  const eh=estadoHorario(p), ab=eh?`<i class="ab${eh.abierto?' on':''}${eh.falta<=60?' pronto':''}">${esc(eh.abierto?eh.txt:eh.largo).toUpperCase()}</i>`:'';
   return `<div class="mrow" data-id="${p.id}" style="--c:${c}"><span class="mk"></span>${stn(p,'sm')}
-    <div class="t"><b>${esc(p.n)}</b><span>${esc(p.sub)} · ${esc(p.barrio)}</span>${tags?`<div class="tags">${tags}</div>`:''}</div>
-    <div class="rc">${p.gr!=null?`<span class="g">★ ${fmtR(p.gr)}</span>`:''}<span class="pr">${PR[p.price]}</span>${d!=null?`<span>${fmtD(d)}</span>`:''}</div></div>`;
+    <div class="t"><b>${esc(p.n)}</b><span>${esc(p.sub)} · ${esc(p.barrio)}</span>${tags||ab?`<div class="tags">${ab}${tags}</div>`:''}</div>
+    <div class="rc">${p.gr!=null?`<span class="g">★ ${fmtR(p.gr)}</span>${resenas(p)}`:''}<span class="pr">${PR[p.price]}</span>${d!=null?`<span>${fmtD(d)}</span>`:''}</div></div>`;
 }
 function renderMobile(){
   if(!isMobile()) return;
@@ -2638,7 +2808,7 @@ function renderMobile(){
   if(state.near&&state.geo) qh+=`<button class="mq on" data-q="__radio" aria-haspopup="dialog">${esc(cercaTxt())} ▾</button><button class="mq on x" data-q="__nocerca" aria-label="Sacar Cerca">✕</button>`;
   if(state.only) qh+=`<button class="mq on" data-q="__only">${esc(state.onlyLabel)} ✕</button>`;   // filtros que antes no se nombraban
   if(state.list) qh+=`<button class="mq on" data-q="__list">${LISTL[state.list]} ✕</button>`;
-  qh+=MOBQ.filter(q=>q.k!=='g45'||PL.some(p=>p.gr!=null)).filter(q=>!(q.k==='cerca'&&state.near&&state.geo)).map(q=>`<button class="mq ${mQuickOn(q.k)?'on':''} ${q.cls||''}" data-q="${q.k}">${q.k==='cerca'&&state.nearBusy?'Ubicando…':q.t}</button>`).join('');
+  qh+=MOBQ.filter(q=>q.k!=='g45'||PL.some(p=>p.gr!=null)).filter(q=>q.k!=='abierto'||conHorario).filter(q=>!(q.k==='cerca'&&state.near&&state.geo)).map(q=>`<button class="mq ${mQuickOn(q.k)?'on':''} ${q.cls||''}" data-q="${q.k}">${q.k==='cerca'&&state.nearBusy?'Ubicando…':q.t}</button>`).join('');
   $('#mQuick').innerHTML=qh;
   const conMapa=!!state.barrio, so=SORTC[state.sort]||SORTC.auto, nf=nFiltros();
   $('#mCount').innerHTML=`<b>${cur.length}</b> lugares`;
@@ -2650,13 +2820,14 @@ function renderMobile(){
   const X=extrasBusqueda(), extra=X.lm.map(l=>`<div class="mrow" data-lm="${l.id}" style="--c:#ffcd5a"><span class="mk"></span><span class="rnd sm" style="--c:#ffcd5a"><b>◆</b></span><div class="t"><b>${esc(l.n)}</b><span>Monumento · ${esc(l.barrio)} · ${placesNear(l).length} lugares cerca</span></div><div class="rc"><span class="g" style="color:#ffcd5a">VER</span></div></div>`).join('')
     +X.bs.map(b=>`<div class="mrow" data-zona="${esc(b.n)}" style="--c:#00e5ff"><span class="mk"></span><span class="rnd sm" style="--c:#00e5ff"><b>${esc(b.n[0])}</b></span><div class="t"><b>Ver todo ${esc(b.n)} (${b.c})</b><span>Barrio · la lista entera</span></div><div class="rc"><span class="g" style="color:var(--neon2)">VER</span></div></div>`).join('');
   if(!cur.length){ list.innerHTML=extra||`<div class="mempty"><b>${state.q?'Nada con “'+esc(state.q)+'”':'Nada con esos filtros'}</b>${X.sug?sugHtml(X.sug):'Probá sacar alguno o buscá otra cosa.'}<br><button id="mClear2">Limpiar filtros</button></div>`; return }
-  list.innerHTML=(activos?'':bloqueRecientes())+extra+cur.slice(0,mLimit).map((p,i)=>mRowHtml(p,i,false)).join('')+(cur.length>mLimit?`<div class="mmore"><button class="ghost" id="mMore">Ver ${Math.min(40,cur.length-mLimit)} más</button></div>`:'');
+  list.innerHTML=nlBar()+(activos?'':bloqueRecientes())+extra+cur.slice(0,mLimit).map((p,i)=>mRowHtml(p,i,false)).join('')+(cur.length>mLimit?`<div class="mmore"><button class="ghost" id="mMore">Ver ${Math.min(40,cur.length-mLimit)} más</button></div>`:'');
 }
 // Míos: sus propias listas, sin tocar los filtros de Buscar
-const MIOS=[['want','Quiero ir'],['been','Ya fui'],['rated','Puntuados']];
-const MIOSL={want:'Quiero ir',been:'Ya fui',rated:'Mis puntuados'};
-const MIOSV={want:['Todavía no marcaste ninguno','En la ficha de un lugar tocá ☆ Quiero ir.'],been:['Todavía no marcaste ninguno como visitado','En la ficha de un lugar tocá Ya fui y queda sellado.'],rated:['Todavía no puntuaste ninguno','En la ficha de un lugar tocá las estrellas de Mi puntaje.']};
-function misLugares(k){ const f=k==='been'?u=>u.been:k==='rated'?u=>u.rating:u=>u.want&&!u.been, t=p=>ud(p.id).t||0;   // Quiero ir = pendientes: lo que ya fuiste pasa a Ya fui
+const MIOS=[['want','Quiero ir'],['been','Ya fui'],['rated','Mi ranking']];
+const MIOSL={want:'Quiero ir',been:'Ya fui',rated:'Mi ranking'};
+const MIOSV={want:['Todavía no marcaste ninguno','En la ficha de un lugar tocá ☆ Quiero ir.'],been:['Todavía no marcaste ninguno como visitado','En la ficha de un lugar tocá Ya fui y queda sellado.'],rated:['Todavía no rankeaste ninguno','Marcá Ya fui en un lugar y comparalo con los otros: así se arma tu top.']};
+function misLugares(k){ if(k==='rated') return misRank().concat(PL.filter(p=>ud(p.id).rk==null&&ud(p.id).rating).sort((a,b)=>ud(b.id).rating-ud(a.id).rating));
+  const f=k==='been'?u=>u.been:u=>u.want&&!u.been, t=p=>ud(p.id).t||0;   // Quiero ir = pendientes: lo que ya fuiste pasa a Ya fui
   return PL.filter(p=>f(ud(p.id))).sort(k==='rated'?(a,b)=>ud(b.id).rating-ud(a.id).rating||t(b)-t(a):(a,b)=>t(b)-t(a)) }
 const ICO={ruta:'<circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 6H14a4 4 0 0 1 0 8h-4a4 4 0 0 0 0 8h6.5"/>',pass:'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/>',stats:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
 function renderMios(){
@@ -2665,7 +2836,7 @@ function renderMios(){
   const acc=(a,c,t,s)=>`<button data-a="${a}" style="--c:${c}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${ICO[a]}</svg><span><b>${t}</b><i>${s}</i></span></button>`;
   $('#mMios').innerHTML=`<div class="mseg" role="tablist" aria-label="Mis listas">${MIOS.map(([x,t])=>`<button data-m="${x}" role="tab" aria-selected="${x===k}" class="${x===k?'on':''}">${t} <b>${n[x]}</b></button>`).join('')}</div>
     <div class="macc">${acc('ruta','var(--sign)','Mi ruta',rps?rps+' paradas':'Armá tu recorrido')}${acc('pass','var(--neon)','Pasaportes',pc+' completos de '+PASS.length)}${acc('stats','var(--neon2)','Bitácora',n.been+' visitados')}${acc('info','#dfe6f2','Ayuda',VER_TXT)}</div>
-    <div class="mmeta"><span><b>${arr.length}</b> ${arr.length===1?'lugar':'lugares'} · ${k==='rated'?'mejor puntuados primero':'últimos primero'}</span><span class="sp">${arr.length?'<button data-a="mapa">Ver en el mapa</button>':''}</span></div>`;
+    <div class="mmeta"><span><b>${arr.length}</b> ${arr.length===1?'lugar':'lugares'} · ${k==='rated'?'tu top':'últimos primero'}</span><span class="sp">${k==='rated'&&misRank().length?'<button data-a="top">Compartir</button>':''}${arr.length?'<button data-a="mapa">Mapa</button>':''}</span></div>`;
   const list=$('#mList'), v=MIOSV[k];
   list.innerHTML=arr.length?arr.map(p=>mRowHtml(p,0,k==='rated')).join(''):`<div class="mempty"><b>${v[0]}</b>${v[1]}<br><button id="mIrBuscar">Ir a buscar</button></div>`;
 }
@@ -2674,7 +2845,17 @@ function misEnMapa(){ const k=M.mios||'want', arr=misLugares(k); if(!arr.length)
   mTab('mapa',{fit:false}); fitPlaces(cur.length?cur:arr);
   if(cur.length<arr.length) toast((arr.length-cur.length)+' quedan ocultos por tus filtros de Buscar') }
 // abrir un lugar desde una lista: fuera del mapa no se crea el mapa 3D ni se vuela una cámara que no se ve
-function mOpen(id){ const enMapa=M.tab==='mapa'; if(enMapa) ensureDeck(); select(id,enMapa); $('#card').hidden=false; }
+function mOpen(id){ const enMapa=M.tab==='mapa'; if(enMapa) ensureDeck();
+  const abrir=()=>{ select(id,enMapa); $('#card').hidden=false };
+  conTransicion(document.querySelector(`#mList .mrow[data-id="${id}"] .rnd`),abrir) }
+// el distintivo de la fila 'vuela' hasta el cartel de la ficha (Chrome/Android y Safari 18; si no hay soporte, abre igual)
+function conTransicion(desde,fn){
+  if(reduced||!document.startViewTransition||!desde){ fn(); return }
+  desde.style.viewTransitionName='rnd-sel'; let hecho=false;
+  const run=()=>{ if(hecho) return; hecho=true; desde.style.viewTransitionName=''; fn(); const a=$('#cardBody .chero .rnd'); if(a) a.style.viewTransitionName='rnd-sel' };
+  const vt=document.startViewTransition(run);
+  setTimeout(()=>{ if(!hecho){ try{ vt.skipTransition() }catch(e){} run() } },250);   // si el navegador no llega a pintar (ahorro de batería), la ficha abre igual
+  vt.ready.catch(()=>{}); vt.finished.catch(()=>{}).finally(()=>{ const a=$('#cardBody .chero .rnd'); if(a) a.style.viewTransitionName='' }) }   // 'Transition was skipped' (pestaña oculta) no es un error
 // encabezado compacto con histéresis (compacta a más de 40 px, expande a menos de 8). Solo si sobra lista para scrollear
 // después de ganar ~130 px: si no, al compactar dejaría de haber scroll, volvería arriba y rebotaría
 function mCompacto(){ const l=$('#mList'), sh=$('#mShell'); if(!l||!sh) return; const st=l.scrollTop, on=sh.classList.contains('compact');
@@ -2695,10 +2876,10 @@ function initMobile(){
   $('#mMios').onclick=e=>{ const s=e.target.closest('[data-m]'); if(s){ M.mios=s.dataset.m; renderMios(); $('#mList').scrollTop=0; return }
     const a=e.target.closest('[data-a]'); if(!a) return; const k=a.dataset.a;
     if(k==='ruta'){renderRutas();openModal('#mRuta')} else if(k==='pass'){renderPass();openModal('#mPass')}
-    else if(k==='stats'){renderStats();openModal('#mStats')} else if(k==='info'){renderInfo();openModal('#mInfo')} else if(k==='mapa') misEnMapa() };
+    else if(k==='stats'){renderStats();openModal('#mStats')} else if(k==='info'){renderInfo();openModal('#mInfo')} else if(k==='mapa') misEnMapa(); else if(k==='top') compartirTop() };
   let mt; $('#mq').oninput=e=>{clearTimeout(mt);mt=setTimeout(()=>{setQuery(e.target.value,e.target);mLimit=40;renderAll()},150)};
   // Enter / Buscar del teclado: aplica lo escrito ya (sin esperar el debounce), baja el teclado y, si queda uno solo, lo abre
-  $('#mq').onkeydown=e=>{ if(e.key!=='Enter') return; e.preventDefault(); clearTimeout(mt); setQuery(e.target.value,e.target); mLimit=40; renderAll(); e.target.blur(); $('#mList').scrollTop=0; const u=unicoBuscado(); if(u) mOpen(u.id) };
+  $('#mq').onkeydown=e=>{ if(e.key!=='Enter') return; e.preventDefault(); clearTimeout(mt); setQuery(e.target.value,e.target); mLimit=40; renderAll(); e.target.blur(); $('#mList').scrollTop=0; if(NL()&&NL().gps&&!state.geo){ cercaGPS(); return } const u=unicoBuscado(); if(u) mOpen(u.id) };
   $('#mqClear').onclick=()=>{setQuery('');mLimit=40;renderAll()};
   $('#mTabs').onclick=e=>{const b=e.target.closest('button');if(b)mTab(b.dataset.t)};
   $('#mBackBtn').onclick=()=>mTab(M.base||'lista');   // igual que el Atrás: vuelve a Buscar o a Míos, de donde se abrió el mapa
@@ -2768,11 +2949,14 @@ function leerHash(){ const h=location.hash; if(!h||h==='#') return null;
   if((m=h.match(/^#p=([a-z0-9-]+)/))&&idVivo(m[1])) return {p:idVivo(m[1])};
   if((m=h.match(/^#h=([a-z0-9-]+)/))&&lmById[m[1]]) return {h:m[1]};
   if(/^#(ruleta|mios|cerca)$/.test(h)) return {k:h.slice(1)};
+  if(m=h.match(/^#top=([^&]+)/)){ let v=m[1]; try{ v=decodeURIComponent(v) }catch(e){}
+    const ids=idsVivos(v.split(',').filter(id=>/^[a-z0-9-]+$/.test(id))).slice(0,10); if(ids.length) return {top:ids} }
   if(m=h.match(/^#r=([^&]+)/)){ let v=m[1]; try{ v=decodeURIComponent(v) }catch(e){}   // una ruta compartida: ids válidos, sin repetir
     const ids=idsVivos(v.split(',').filter(id=>/^[a-z0-9-]+$/.test(id))).slice(0,30); if(ids.length) return {r:ids} }
   return null }
 function abrirHash(hs){ if(!hs) return;
   if(hs.r){ abrirRutaCompartida(hs.r); return }
+  if(hs.top){ abrirRutaCompartida(hs.top,'top'); return }
   if(isMobile()){
     if(hs.p) mOpen(hs.p); else if(hs.h){ mTab('mapa',{fit:false}); openLandmark(hs.h) }
     else if(hs.k==='ruleta') mTab('ruleta'); else if(hs.k==='mios') mTab('guardados'); else if(hs.k==='cerca') cercaGPS();
@@ -2867,7 +3051,7 @@ if('serviceWorker' in navigator){
   });
   document.getElementById('swNewYes').onclick=()=>{ recargando=true; location.reload() };
   document.getElementById('swNewNo').onclick=()=>{ document.getElementById('swNew').hidden=true };
-  addEventListener('load',()=>sw.register('sw.js?v=fd1679f',{updateViaCache:'none'}).then(reg=>{
+  addEventListener('load',()=>sw.register('sw.js?v=f4057c2',{updateViaCache:'none'}).then(reg=>{
     document.addEventListener('visibilitychange',()=>{ if(!document.hidden) reg.update().catch(()=>{}) });
   }).catch(()=>{}));
 }
