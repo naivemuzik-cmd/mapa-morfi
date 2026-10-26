@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, interactive-widget=resizes-content">
 <meta name="theme-color" content="#06070b">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 2854 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
+<meta name="description" content="Mapa 3D de dónde comer y tomar en Buenos Aires: 2605 lugares, Guía Michelin, bodegones, pizzerías, bares y monumentos.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script>window.MORFI_VER='f4057c2'</script>
+<script>window.MORFI_VER='c92a1e4'</script>
 <style>
   /* márgenes seguros de celulares con muesca / barra inferior */
   .topbar{top:calc(12px + env(safe-area-inset-top,0px))!important}
@@ -296,6 +296,20 @@
   .rk-top{color:var(--ok)}.rk-bien{color:var(--sign)}.rk-no{color:#ff7a93}
   .rank-w:empty{display:none}
   ::view-transition-group(rnd-sel){animation-duration:.38s;animation-timing-function:cubic-bezier(.2,.9,.25,1.05)}
+  .agv{float:right;color:var(--neon2);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+  .evc{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:168px;padding:8px 11px;border-radius:6px;border:1px solid var(--line);border-left:3px solid var(--neon);background:rgba(255,45,85,.05);text-align:left}
+  .evc.ya{border-left-color:var(--ok);background:rgba(61,255,158,.05)}
+  .evc i{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--neon2)}
+  .evc b{font-size:13px;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .evc small{font-size:11px;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .evf{display:grid;grid-template-columns:78px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .evf.foco{background:linear-gradient(90deg,rgba(255,45,85,.1),transparent);border-radius:4px}
+  .evd b{display:block;font-family:var(--mono);font-size:12px;color:var(--neon2);line-height:1.25}
+  .evd small{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+  .evt h3{font-family:var(--display);font-weight:400;font-size:16px;margin:0 0 3px}
+  .evt p{margin:0 0 6px;font-size:13px;color:var(--muted)}
+  .evt .evl{color:var(--text);font-size:12.5px}.evt .evl span{color:var(--sign)}
+  .eva{display:flex;flex-wrap:wrap;gap:6px}.eva .ghost{height:34px;font-size:12px}
   .gnr{display:block;font-family:var(--mono);font-size:10px;color:var(--dim);font-weight:400;letter-spacing:.02em}   /* cuántas reseñas respaldan el puntaje */
   .pick{font-size:14.5px;line-height:1.55;padding:12px 14px;border-radius:3px;background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 2px,transparent 2px 4px),rgba(255,212,0,.05);border:1px dashed rgba(255,212,0,.35)}
   .pick em{font-style:normal;color:var(--sign);font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:block;margin-bottom:5px}
@@ -868,14 +882,16 @@
   <div class="modal" id="mPass" hidden role="dialog" aria-labelledby="hPass"><div class="mbox glass"><div class="mh"><h2 id="hPass">Pasaportes<small>Completá desafíos y sellá</small></h2><button class="x" data-close aria-label="Cerrar">✕</button></div><div class="mb" id="passBody"></div></div></div>
   <div class="modal" id="mRuta" hidden role="dialog" aria-labelledby="hRuta"><div class="mbox glass"><div class="mh"><h2 id="hRuta">Rutas<small>Recorridos a pie, parada por parada</small></h2><button class="x" data-close aria-label="Cerrar">✕</button></div><div class="mb" id="rutaBody"></div></div></div>
   <div class="modal" id="mStats" hidden role="dialog" aria-labelledby="hStats"><div class="mbox glass"><div class="mh"><h2 id="hStats">Mi bitácora<small>Lo que ya morfaste</small></h2><button class="x" data-close aria-label="Cerrar">✕</button></div><div class="mb" id="statsBody"></div></div></div>
+  <div class="modal" id="mAgenda" hidden role="dialog" aria-labelledby="hAgenda"><div class="mbox glass"><div class="mh"><h2 id="hAgenda">Agenda gastronómica<small>Ferias, festivales y noches en la ciudad</small></h2><button class="x" data-close aria-label="Cerrar">✕</button></div><div class="mb" id="agendaBody"></div></div></div>
   <div class="modal" id="mInfo" hidden role="dialog" aria-labelledby="hInfo"><div class="mbox glass"><div class="mh"><h2 id="hInfo">Mapa del Morfi<small>Cómo se usa</small></h2><button class="x" data-close aria-label="Cerrar">✕</button></div><div class="mb info" id="infoBody"></div></div></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/deck.gl@9.1.14/dist.min.js"></script>
-<script src="geo.js?v=f4057c2"></script>
-<script src="calles.js?v=f4057c2"></script>
-<script src="landmarks.js?v=f4057c2"></script>
-<script src="places.js?v=f4057c2"></script>
+<script src="geo.js?v=c92a1e4"></script>
+<script src="calles.js?v=c92a1e4"></script>
+<script src="landmarks.js?v=c92a1e4"></script>
+<script src="places.js?v=c92a1e4"></script>
+<script src="eventos.js?v=c92a1e4"></script>
 <script>
 (function(){
 'use strict';
@@ -1502,10 +1518,11 @@ function layers(now){
   // el halo, solo para los destacados, los tuyos y el elegido (en Palermo, para todos era una mancha que tapaba las calles)
   const halo=memo('halo',[dots],()=>dots.filter(p=>{const u=ud(p.id);return destacado(p)||u.want||u.been||state.sel===p.id}));
   const dotOp=1-anim.heat*.5;
-  L.push(new D.ScatterplotLayer({id:'halo',data:halo,getPosition:p=>[p.lng,p.lat],getRadius:1,radiusScale:rp*2.7,radiusUnits:'pixels',getFillColor:p=>[...CC[p.cat],40],opacity:1-anim.heat,parameters:flat}));
-  L.push(new D.ScatterplotLayer({id:'puntos',data:dots,getPosition:p=>[p.lng,p.lat],getRadius:1,radiusScale:rp,radiusUnits:'pixels',getFillColor:p=>[...CC[p.cat],255],opacity:dotOp,stroked:true,
+  const hTick=Math.floor(minSemana()/5), cerradoYa=p=>!!p.h&&!abiertoAhora(p);   // cerrado en este momento: punto apagado
+  L.push(new D.ScatterplotLayer({id:'halo',data:halo,getPosition:p=>[p.lng,p.lat],getRadius:1,radiusScale:rp*2.7,radiusUnits:'pixels',getFillColor:p=>[...CC[p.cat],cerradoYa(p)?12:40],opacity:1-anim.heat,parameters:flat,updateTriggers:{getFillColor:hTick}}));
+  L.push(new D.ScatterplotLayer({id:'puntos',data:dots,getPosition:p=>[p.lng,p.lat],getRadius:1,radiusScale:rp,radiusUnits:'pixels',getFillColor:p=>cerradoYa(p)&&state.sel!==p.id?[...CC[p.cat].map(v=>Math.round(v*.38+8)),235]:[...CC[p.cat],255],opacity:dotOp,stroked:true,
     getLineColor:p=>{const u=ud(p.id);return u.been?[61,255,158,255]:u.want?[255,212,0,255]:[4,5,8,235]},getLineWidth:p=>{const u=ud(p.id);return (u.been||u.want)?2.2:1.2},lineWidthUnits:'pixels',
-    pickable:PK&&zNow>=LOD.tocarLugares,autoHighlight:true,highlightColor:[255,255,255,110],parameters:flat,updateTriggers:{getLineColor:uVer,getLineWidth:uVer}}));
+    pickable:PK&&zNow>=LOD.tocarLugares,autoHighlight:true,highlightColor:[255,255,255,110],parameters:flat,updateTriggers:{getLineColor:uVer,getLineWidth:uVer,getFillColor:[hTick,state.sel]}}));
   if(rpts.length) L.push(new D.ScatterplotLayer({id:'ruta-n',data:rpts,getPosition:p=>[p.lng,p.lat],getRadius:11,radiusUnits:'pixels',getFillColor:[255,255,255,255],stroked:true,getLineColor:[255,212,0,255],lineWidthUnits:'pixels',getLineWidth:3,lineWidthMinPixels:2,pickable:PK,parameters:flat}));
   if(zNow>=LOD.estaciones) L.push(new D.ScatterplotLayer({id:'estaciones',data:STATIONS,getPosition:d=>d.p,getRadius:3.5,radiusUnits:'pixels',getFillColor:[240,244,250,240],getLineColor:d=>[...d.c,255],stroked:true,getLineWidth:2,lineWidthUnits:'pixels',pickable:PK,parameters:flat}));
   // 'Estás acá': núcleo blanco con aro cian (distinto de cualquier lugar), siempre que se sepa dónde estás
@@ -1571,9 +1588,12 @@ function layers(now){
     if(state.near&&yo){ const rt=memo('radio-t',[state.geo,state.nearR],radioTexto);
       L.push(new D.TextLayer({id:'radio-t',data:rt,getPosition:d=>d.p,getText:d=>d.t,getSize:10,sizeUnits:'pixels',getColor:[0,229,255,235],fontFamily:'IBM Plex Mono, monospace',fontWeight:700,
         characterSet:RADIO_CS,fontSettings:F44,outlineWidth:3,outlineColor:[4,5,8,255],billboard:true,getTextAnchor:'middle',getAlignmentBaseline:'center',parameters:flat})) }
+    if(state.ev&&state.ev.lat!=null){ const ed=memo('ev',[state.ev],()=>[{p:[+state.ev.lng,+state.ev.lat],t:state.ev.n}]);
+      L.push(new D.ScatterplotLayer({id:'evento',data:ed,getPosition:d=>d.p,getRadius:8,radiusUnits:'pixels',getFillColor:[255,255,255,255],stroked:true,getLineColor:[255,45,85,255],getLineWidth:3,lineWidthUnits:'pixels',parameters:flat}));
+      L.push(new D.TextLayer({id:'evento-t',data:ed,getPosition:d=>d.p,getText:d=>d.t,getSize:12,sizeUnits:'pixels',getPixelOffset:[0,-14],getColor:[255,255,255,255],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:'auto',outlineWidth:3,outlineColor:[4,5,8,255],billboard:true,getTextAnchor:'middle',getAlignmentBaseline:'bottom',parameters:flat})) }
     if(yo&&state.geo.manual) L.push(new D.TextLayer({id:'origen-t',data:memo('origen-t',[state.geo],()=>[{p:[state.geo.lng,state.geo.lat],t:state.geo.label}]),getPosition:d=>d.p,getText:d=>d.t,getSize:11,sizeUnits:'pixels',getPixelOffset:[0,-11],getColor:[255,212,0,255],
       fontFamily:'IBM Plex Mono, monospace',fontWeight:700,characterSet:ORIGEN_CS,fontSettings:F44,outlineWidth:3,outlineColor:[4,5,8,255],billboard:true,getTextAnchor:'middle',getAlignmentBaseline:'bottom',parameters:flat}));
-    if(LB.p.length) L.push(new D.TextLayer({id:'lugar-t',data:LB.p,pickable:PK,getPosition:p=>[p.lng,p.lat],getText:p=>p.n,getSize:12,sizeUnits:'pixels',getColor:p=>p.dist?[255,212,0,255]:[243,245,249,235],getPixelOffset:[0,-(radiusPx()+8)],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:CHARSET,fontSettings:F40,outlineWidth:3,outlineColor:[4,5,8,255],getTextAnchor:'middle',getAlignmentBaseline:'bottom',billboard:true,parameters:flat,updateTriggers:{getPixelOffset:zq}}));
+    if(LB.p.length) L.push(new D.TextLayer({id:'lugar-t',data:LB.p,pickable:PK,getPosition:p=>[p.lng,p.lat],getText:p=>p.n,getSize:12,sizeUnits:'pixels',getColor:p=>cerradoYa(p)&&state.sel!==p.id?(p.dist?[255,212,0,140]:[200,206,218,120]):p.dist?[255,212,0,255]:[243,245,249,235],getPixelOffset:[0,-(radiusPx()+8)],fontFamily:'Zen Kaku Gothic New, sans-serif',fontWeight:700,characterSet:CHARSET,fontSettings:F40,outlineWidth:3,outlineColor:[4,5,8,255],getTextAnchor:'middle',getAlignmentBaseline:'bottom',billboard:true,parameters:flat,updateTriggers:{getPixelOffset:zq,getColor:[hTick,state.sel]}}));
   }
   return L;
 }
@@ -2033,11 +2053,42 @@ function extrasBusqueda(){
 const sugHtml=s=>`<button class="sug" data-sug="${esc(s.txt)}">¿Quisiste decir <b>${esc(s.txt)}</b>?</button>`;
 // 'Vistos hace poco' y 'Tengo ganas de…': con la búsqueda y los filtros vacíos, antes de la lista
 const chipsRecientes=()=>REC.map(id=>byId[id]).filter(Boolean).map(p=>`<button class="vrec" data-rec="${p.id}" style="--c:${CATS[p.cat].c}">${stn(p,'sm')}<span>${esc(p.n)}</span></button>`).join('');
-function bloqueRecientes(){ const r=chipsRecientes(); if(!r&&!ANTOJOS.length) return '';
-  return `<div class="recbox">${r?`<div class="rech">Vistos hace poco</div><div class="recrow recvistos">${r}</div>`:''}${ANTOJOS.length?`<div class="rech">Tengo ganas de…</div><div class="recrow">${ANTOJOS.map(a=>`<button class="antj" data-ant="${esc(a.t)}">${esc(a.t)} <i>${a.n}</i></button>`).join('')}</div>`:''}</div>` }
+/* ---------- agenda de eventos (eventos.js: window.EVENTOS, la arma una tarea semanal) ---------- */
+const hoyAR=()=>{ const d=new Date(Date.now()-3*36e5); return d.toISOString().slice(0,10) };   // fecha de hoy en Buenos Aires
+const EVENTOS=(window.EVENTOS||[]).filter(e=>e&&e.n&&e.desde).map((e,i)=>({...e,i,hasta:e.hasta||e.desde})).sort((a,b)=>a.desde.localeCompare(b.desde)||a.n.localeCompare(b.n,'es'));
+const proximos=()=>{ const h=hoyAR(); return EVENTOS.filter(e=>e.hasta>=h) };
+const MESC=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function fechaEv(e){ const h=hoyAR(), f=x=>{ const [y,m,d]=x.split('-').map(Number); return d+' '+MESC[m-1] };
+  if(e.recurrente) return e.recurrente;
+  if(e.desde<=h&&e.hasta>=h) return e.desde===e.hasta?'Hoy':'Hasta el '+f(e.hasta);
+  return e.desde===e.hasta?f(e.desde):f(e.desde)+' al '+f(e.hasta) }
+const enCurso=e=>{ const h=hoyAR(); return e.desde<=h&&e.hasta>=h };
+function chipsAgenda(){ const ev=proximos().slice(0,8); if(!ev.length) return '';
+  return `<div class="rech">Agenda gastronómica <button class="agv" data-agenda="1">Ver todo ›</button></div><div class="recrow">${ev.map(e=>`<button class="evc${enCurso(e)?' ya':''}" data-ev="${e.i}"><i>${esc(fechaEv(e))}</i><b>${esc(e.n)}</b><small>${esc(e.barrio||e.lugar||'')}</small></button>`).join('')}</div>` }
+function renderAgenda(foco){ const ev=proximos(), b=$('#agendaBody');
+  if(!ev.length){ b.innerHTML='<p class="small">No hay eventos cargados para las próximas semanas.</p>'; return }
+  let mes='';
+  b.innerHTML=ev.map(e=>{ const m=e.recurrente?'Todo el mes':e.desde<=hoyAR()?'Ahora':MESC[+e.desde.slice(5,7)-1].toUpperCase()+' '+e.desde.slice(0,4);
+    const cab=m!==mes?`<div class="hx">${esc(m)}</div>`:''; mes=m; const u=safeUrl(e.url);
+    const dest=e.lat!=null?`${(+e.lat).toFixed(6)},${(+e.lng).toFixed(6)}`:encodeURIComponent((e.dir||e.lugar||e.n)+', CABA');
+    return cab+`<div class="evf${foco===e.i?' foco':''}" id="ev-${e.i}"><div class="evd"><b>${esc(fechaEv(e))}</b>${e.hora?`<small>${esc(e.hora)}</small>`:''}</div>
+      <div class="evt"><h3>${esc(e.n)}</h3><p class="evl">${esc([e.lugar,e.barrio].filter(Boolean).join(' · '))}${e.precio?` · <span>${esc(e.precio)}</span>`:''}</p>${e.desc?`<p>${esc(e.desc)}</p>`:''}
+      <div class="eva">${e.lat!=null?`<button class="ghost" data-evmap="${e.i}">Ver en el mapa</button>`:''}<a class="ghost" href="https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=transit" target="_blank" rel="noopener">Cómo llegar ↗</a>${u?`<a class="ghost" href="${esc(u)}" target="_blank" rel="noopener">${esc(e.fuente||'Fuente')} ↗</a>`:''}</div></div></div>` }).join('')
+    +`<p class="small" style="margin-top:14px">Fechas según cada fuente: confirmá antes de ir. La agenda se actualiza todas las semanas.</p>`;
+  if(foco!=null) setTimeout(()=>{ const el=$('#ev-'+foco); if(el) el.scrollIntoView({block:'center'}) },60) }
+function abrirAgenda(foco){ renderAgenda(foco); openModal('#mAgenda') }
+// el evento elegido en el mapa: un punto blanco con su nombre (se va al cerrar la ficha o elegir otro lugar)
+function verEvento(i){ const e=EVENTOS.find(x=>x.i===i); if(!e||e.lat==null) return; closeModal(); state.ev=e;
+  if(isMobile()) mTab('mapa',{fit:false}); else ensureDeck();
+  focusPoint({lat:+e.lat,lng:+e.lng},15.4); kick(); toast(e.n+' · '+fechaEv(e)) }
+$('#agendaBody').addEventListener('click',e=>{ const m=e.target.closest('[data-evmap]'); if(m) verEvento(+m.dataset.evmap) });
+function bloqueRecientes(){ const r=chipsRecientes(), ag=chipsAgenda(); if(!r&&!ANTOJOS.length&&!ag) return '';
+  return `<div class="recbox">${ag}${r?`<div class="rech">Vistos hace poco</div><div class="recrow recvistos">${r}</div>`:''}${ANTOJOS.length?`<div class="rech">Tengo ganas de…</div><div class="recrow">${ANTOJOS.map(a=>`<button class="antj" data-ant="${esc(a.t)}">${esc(a.t)} <i>${a.n}</i></button>`).join('')}</div>`:''}</div>` }
 function pintarRecientes(){ const h=chipsRecientes(); $$('.recvistos').forEach(el=>el.innerHTML=h) }
 // toques de esos bloques (lista de PC y del celular)
 function accionBusqueda(x){ const d=x.dataset;
+  if(d.agenda){ abrirAgenda(); return }
+  if(d.ev!=null){ abrirAgenda(+d.ev); return }
   if(d.rec){ if(isMobile()) mOpen(d.rec); else select(d.rec,true); return }
   if(d.f){ quitarFiltro(d.f); return }
   setQuery(d.sug||d.ant||''); listLimit=120; mLimit=40; renderAll();
@@ -2084,7 +2135,7 @@ function renderList(){
   const s=el.querySelector('.li.is-sel'); if(s&&!isMobile()) s.scrollIntoView({block:'nearest'});
 }
 $('#list').addEventListener('click',e=>{ if(e.target.id==='moreBtn'){listLimit+=120;renderList();return}
-  const x=e.target.closest('[data-sug],[data-rec],[data-ant],[data-f]'); if(x){ accionBusqueda(x); return }
+  const x=e.target.closest('[data-sug],[data-rec],[data-ant],[data-f],[data-agenda],[data-ev]'); if(x){ accionBusqueda(x); return }
   const li=e.target.closest('.li'); if(!li) return; if(li.dataset.lm) openLandmark(li.dataset.lm); else if(li.dataset.zona) verZona(li.dataset.zona); else conTransicion(li.querySelector('.rnd'),()=>select(li.dataset.id,true))});
 $('#list').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const li=e.target.closest('.li');if(!li)return;e.preventDefault();if(li.dataset.lm)openLandmark(li.dataset.lm);else if(li.dataset.zona)verZona(li.dataset.zona);else select(li.dataset.id,true)});
 // filas de la ficha del monumento ('Para comer y tomar cerca'): Enter o Espacio las abren como el clic
@@ -2306,7 +2357,7 @@ function select(id,fly){
   if(fly) mostrarLugar(p,fly);
   tip.classList.remove('on'); kick(); syncNav();
 }
-function closeCard(){state.sel=null;state.lmSel=null;TURN.on=false;renderGen++;const c=$('#card');c.hidden=true;c.classList.remove('peek');c.style.transform='';marcarFila(null);kick();syncNav()}
+function closeCard(){state.ev=null;state.sel=null;state.lmSel=null;TURN.on=false;renderGen++;const c=$('#card');c.hidden=true;c.classList.remove('peek');c.style.transform='';marcarFila(null);kick();syncNav()}
 
 /* ---------- panel y filtros ---------- */
 function openDrawer(open){ if(isMobile()) open=false; $('#drawer').hidden=!open;$('#btnList').classList.toggle('on',open);$('#btnList').setAttribute('aria-pressed',open);if(open&&isMobile())$('#card').hidden=true}
@@ -2829,13 +2880,13 @@ const MIOSV={want:['Todavía no marcaste ninguno','En la ficha de un lugar tocá
 function misLugares(k){ if(k==='rated') return misRank().concat(PL.filter(p=>ud(p.id).rk==null&&ud(p.id).rating).sort((a,b)=>ud(b.id).rating-ud(a.id).rating));
   const f=k==='been'?u=>u.been:u=>u.want&&!u.been, t=p=>ud(p.id).t||0;   // Quiero ir = pendientes: lo que ya fuiste pasa a Ya fui
   return PL.filter(p=>f(ud(p.id))).sort(k==='rated'?(a,b)=>ud(b.id).rating-ud(a.id).rating||t(b)-t(a):(a,b)=>t(b)-t(a)) }
-const ICO={ruta:'<circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 6H14a4 4 0 0 1 0 8h-4a4 4 0 0 0 0 8h6.5"/>',pass:'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/>',stats:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
+const ICO={agenda:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',ruta:'<circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 6H14a4 4 0 0 1 0 8h-4a4 4 0 0 0 0 8h6.5"/>',pass:'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/>',stats:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
 function renderMios(){
   const k=M.mios||'want', arr=misLugares(k), n={}; MIOS.forEach(([x])=>n[x]=x===k?arr.length:misLugares(x).length);
   const rps=state.route.filter(id=>byId[id]).length, pc=PASS.filter(p=>p.ps.every(x=>ud(x.id).been)).length;
   const acc=(a,c,t,s)=>`<button data-a="${a}" style="--c:${c}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${ICO[a]}</svg><span><b>${t}</b><i>${s}</i></span></button>`;
   $('#mMios').innerHTML=`<div class="mseg" role="tablist" aria-label="Mis listas">${MIOS.map(([x,t])=>`<button data-m="${x}" role="tab" aria-selected="${x===k}" class="${x===k?'on':''}">${t} <b>${n[x]}</b></button>`).join('')}</div>
-    <div class="macc">${acc('ruta','var(--sign)','Mi ruta',rps?rps+' paradas':'Armá tu recorrido')}${acc('pass','var(--neon)','Pasaportes',pc+' completos de '+PASS.length)}${acc('stats','var(--neon2)','Bitácora',n.been+' visitados')}${acc('info','#dfe6f2','Ayuda',VER_TXT)}</div>
+    <div class="macc">${acc('ruta','var(--sign)','Mi ruta',rps?rps+' paradas':'Armá tu recorrido')}${acc('pass','var(--neon)','Pasaportes',pc+' completos de '+PASS.length)}${acc('stats','var(--neon2)','Bitácora',n.been+' visitados')}${acc('info','#dfe6f2','Ayuda',VER_TXT)}${EVENTOS.length?acc('agenda','#ff2d55','Agenda',proximos().length+' eventos próximos'):''}</div>
     <div class="mmeta"><span><b>${arr.length}</b> ${arr.length===1?'lugar':'lugares'} · ${k==='rated'?'tu top':'últimos primero'}</span><span class="sp">${k==='rated'&&misRank().length?'<button data-a="top">Compartir</button>':''}${arr.length?'<button data-a="mapa">Mapa</button>':''}</span></div>`;
   const list=$('#mList'), v=MIOSV[k];
   list.innerHTML=arr.length?arr.map(p=>mRowHtml(p,0,k==='rated')).join(''):`<div class="mempty"><b>${v[0]}</b>${v[1]}<br><button id="mIrBuscar">Ir a buscar</button></div>`;
@@ -2869,14 +2920,14 @@ function initMobile(){
   $('#mQuick').onclick=e=>{const b=e.target.closest('.mq');if(b) mToggleQuick(b.dataset.q)};
   $('#mList').onclick=e=>{ if(e.target.id==='mMore'){mLimit+=40;renderMobile();return} if(e.target.id==='mClear2'){limpiarFiltros();return}
     if(e.target.id==='mIrBuscar'){mTab('lista');return}
-    const x=e.target.closest('[data-sug],[data-rec],[data-ant]'); if(x){ accionBusqueda(x); return }
+    const x=e.target.closest('[data-sug],[data-rec],[data-ant],[data-agenda],[data-ev]'); if(x){ accionBusqueda(x); return }
     const r=e.target.closest('.mrow'); if(!r) return; if(r.dataset.lm) openLandmark(r.dataset.lm); else if(r.dataset.zona) verZona(r.dataset.zona); else mOpen(r.dataset.id)};
   $('#mList').addEventListener('scroll',mCompacto,{passive:true});
   $('#mList').addEventListener('touchstart',()=>{ const q=$('#mq'); if(document.activeElement===q) q.blur() },{passive:true});   // scrollear baja el teclado
   $('#mMios').onclick=e=>{ const s=e.target.closest('[data-m]'); if(s){ M.mios=s.dataset.m; renderMios(); $('#mList').scrollTop=0; return }
     const a=e.target.closest('[data-a]'); if(!a) return; const k=a.dataset.a;
     if(k==='ruta'){renderRutas();openModal('#mRuta')} else if(k==='pass'){renderPass();openModal('#mPass')}
-    else if(k==='stats'){renderStats();openModal('#mStats')} else if(k==='info'){renderInfo();openModal('#mInfo')} else if(k==='mapa') misEnMapa(); else if(k==='top') compartirTop() };
+    else if(k==='stats'){renderStats();openModal('#mStats')} else if(k==='info'){renderInfo();openModal('#mInfo')} else if(k==='mapa') misEnMapa(); else if(k==='agenda') abrirAgenda(); else if(k==='top') compartirTop() };
   let mt; $('#mq').oninput=e=>{clearTimeout(mt);mt=setTimeout(()=>{setQuery(e.target.value,e.target);mLimit=40;renderAll()},150)};
   // Enter / Buscar del teclado: aplica lo escrito ya (sin esperar el debounce), baja el teclado y, si queda uno solo, lo abre
   $('#mq').onkeydown=e=>{ if(e.key!=='Enter') return; e.preventDefault(); clearTimeout(mt); setQuery(e.target.value,e.target); mLimit=40; renderAll(); e.target.blur(); $('#mList').scrollTop=0; if(NL()&&NL().gps&&!state.geo){ cercaGPS(); return } const u=unicoBuscado(); if(u) mOpen(u.id) };
@@ -3026,6 +3077,8 @@ mobileMQ.addEventListener('change',()=>{
   kick();
 });
 window.addEventListener('resize',()=>{computeHome();kick()});
+// cada 5 minutos: 'Abierto ahora', los estados de las filas y los puntos apagados del mapa se ponen al día
+setInterval(()=>{ if(document.hidden||!conHorario) return; if(!(isMobile()&&M.tab==='mapa')&&!(document.activeElement&&document.activeElement.id==='aNote')) refrescarListas(); kick() },300000);
 })();
 </script>
 
@@ -3051,7 +3104,7 @@ if('serviceWorker' in navigator){
   });
   document.getElementById('swNewYes').onclick=()=>{ recargando=true; location.reload() };
   document.getElementById('swNewNo').onclick=()=>{ document.getElementById('swNew').hidden=true };
-  addEventListener('load',()=>sw.register('sw.js?v=f4057c2',{updateViaCache:'none'}).then(reg=>{
+  addEventListener('load',()=>sw.register('sw.js?v=c92a1e4',{updateViaCache:'none'}).then(reg=>{
     document.addEventListener('visibilitychange',()=>{ if(!document.hidden) reg.update().catch(()=>{}) });
   }).catch(()=>{}));
 }
